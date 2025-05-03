@@ -1,5 +1,5 @@
-{"level":30,"time":"2025-05-03T12:17:43.664Z","pid":13868,"hostname":"PM-COR-RPASERVER","msg":"Listening on 63503"}
-(node:13868) DeprecationWarning: Calling start() is no longer necessary. It can be safely omitted.
+{"level":30,"time":"2025-05-03T13:57:06.262Z","pid":5668,"hostname":"PM-COR-RPASERVER","msg":"Listening on 64536"}
+(node:5668) DeprecationWarning: Calling start() is no longer necessary. It can be safely omitted.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 ================= Original suppressed error =================
 Error: Browser has been closed.
@@ -14,8 +14,8 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1698:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2025-05-03T12:17:43.761Z","pid":13868,"hostname":"PM-COR-RPASERVER","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2025-05-03T12:17:43.761Z","pid":13868,"hostname":"PM-COR-RPASERVER","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2025-05-03T13:57:06.378Z","pid":5668,"hostname":"PM-COR-RPASERVER","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2025-05-03T13:57:06.378Z","pid":5668,"hostname":"PM-COR-RPASERVER","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\index.js:12223:15)
@@ -29,7 +29,7 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1698:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2025-05-03T12:17:43.766Z","pid":13868,"hostname":"PM-COR-RPASERVER","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2025-05-03T12:17:43.766Z","pid":13868,"hostname":"PM-COR-RPASERVER","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2025-05-03T12:17:45.809Z","pid":13868,"hostname":"PM-COR-RPASERVER","msg":"Start of node method closeAllBrowsers"}
-{"level":30,"time":"2025-05-03T12:17:45.809Z","pid":13868,"hostname":"PM-COR-RPASERVER","msg":"End of node method closeAllBrowsers"}
+{"level":30,"time":"2025-05-03T13:57:06.389Z","pid":5668,"hostname":"PM-COR-RPASERVER","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2025-05-03T13:57:06.389Z","pid":5668,"hostname":"PM-COR-RPASERVER","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2025-05-03T13:57:08.524Z","pid":5668,"hostname":"PM-COR-RPASERVER","msg":"Start of node method closeAllBrowsers"}
+{"level":30,"time":"2025-05-03T13:57:08.524Z","pid":5668,"hostname":"PM-COR-RPASERVER","msg":"End of node method closeAllBrowsers"}

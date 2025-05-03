@@ -28,12 +28,12 @@ ${Column2}
 &{Data}    
 ${DownloadFolderPath}    C:/Users/Vishnu Sathyadev/Desktop/TML Project/SUPPORTING DOC_2.xlsx
 ${PageDropdownValue}    10
-${StatusFilePath}       C:/tml-integration_branch/Input/000208299601052025_WAR.pdf
+${StatusFilePath}       C:\\tml-integration_branch\\Input\\000208299601052025_WAR.pdf
 
 *** Tasks ***
 TestTask
 
-    Digital Sign Using Sikuli    ${StatusFilePath}    1245    AMC    ABC@123
+    Digital Sign Using Sikuli    ${StatusFilePath}    1245    AMC    ABCD@1234
     # New Browser            chromium       headless=${False}
     # New Page             https://demo.automationtesting.in/Frames.html
     Sleep                ${SHORT_WAIT}    

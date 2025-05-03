@@ -1,6 +1,7 @@
 *** Settings ***
 Library         SikuliLibrary  
 Library         RPA.Browser.Selenium   
+Library         RPA.Browser.Playwright
 Library         RPA.FileSystem
 Library         OperatingSystem
 Library         RPA.Windows
@@ -9,6 +10,7 @@ Library         Collections
 Library         RPA.PDF
 Resource        Status.robot
 Resource        TextLog.robot
+Resource    ConfigManagement.robot
 Variables       ../Variables/GlobalVariables.py
 
 *** Variables ***
@@ -27,7 +29,8 @@ Digital Sign Using Sikuli
 
         ${Parts}         Split String    ${PdfFilePath}    \\
         ${FileName}      Set Variable    ${Parts}[-1]
-        ${SavePath}      Join Path       ${EXECDIR}        Output    ${FileName}
+        ${SavePath}      Join Path       ${EXECDIR}        Output\\${FileName}    
+        # ${SavePath}      Join Path       ${EXECDIR}        ${FileName}
 
         #Updating Tracker Excel Status
         Set To Dictionary          ${ReadDictionary}      Invoice Type            ${InvoiceType}    
@@ -96,7 +99,7 @@ Digital Sign Using Sikuli
         SikuliLibrary.Click                        ${SikuliFolderPath}sign_button.png  
 
         #Invoke Save PDF Keyword  
-        ${SaveStatus}    Save PDF    ${SavePath}    ${SikuliFolderPath}
+        ${SaveStatus}    Save PDF    ${SavePath}    ${SikuliFolderPath}    ${PdfFilePath}
         IF  ${SaveStatus}
             ${Log}           Set Variable    Successfully saved the digitally signed invoice.
             Text File Log    Info            Digital Sign Using Sikuli    ${Log}
@@ -114,7 +117,9 @@ Digital Sign Using Sikuli
             SikuliLibrary.Input Text    ${SikuliFolderPath}sign_credential.png    ${Password}
             SikuliLibrary.Click         ${SikuliFolderPath}sign_ok_button.png
         END
-
+        Sleep                           ${SHORT_WAIT}           
+        Close All Applications
+        
         ${Log}           Set Variable    Completed processing digital sign implementation using Sikuli.
         Text File Log    Info            Digital Sign Using Sikuli    ${Log}
         Log              ${Log}
@@ -140,7 +145,7 @@ Drag Selection To Sign
     END
 
 Save PDF
-    [Arguments]     ${SavePath}    ${SikuliFolderPath}
+    [Arguments]     ${SavePath}    ${SikuliFolderPath}    ${PdfFilePath}
     TRY
         RPA.Windows.Control Window      name:"Save As"  
         RPA.Windows.Set Value           name:"File name:" and path:"1|1|6|3|2|1"      ${SavePath} 
@@ -148,9 +153,8 @@ Save PDF
         RPA.Desktop.Press Keys          Delete
         RPA.Windows.Set Value           name:"File name:" and path:"1|1|6|3|2|1"      ${SavePath} 
         Sleep                           ${DEFAULT_WAIT}
-        SikuliLibrary.Click             ${SikuliFolderPath}save_button.png
-        Sleep                           ${SHORT_WAIT}
-        Close All Applications
+        RPA.Desktop.Press Keys          Enter
+        # SikuliLibrary.Click             ${SikuliFolderPath}save_button.png
         RETURN      True
     EXCEPT    AS    ${Exception}
         Log         ${Exception}
