@@ -21,7 +21,7 @@ Variables       ../Variables/GlobalVariables.py
 *** Keywords ***
 
 Digital Sign Using Sikuli  
-    [Arguments]       ${PdfFilePath}    ${TmlRefNumber}    ${InvoiceType}    ${Password}
+    [Arguments]       ${PdfFilePath}    ${TmlRefNumber}    ${InvoiceType}    ${Password}    ${GoogleDrivePath}
     TRY
         ${Log}           Set Variable    Started processing digital sign implementation using Sikuli.
         Text File Log    Info            Digital Sign Using Sikuli    ${Log}
@@ -29,7 +29,7 @@ Digital Sign Using Sikuli
 
         ${Parts}         Split String    ${PdfFilePath}    \\
         ${FileName}      Set Variable    ${Parts}[-1]
-        ${SavePath}      Join Path       ${EXECDIR}        Output\\${FileName}    
+        ${SavePath}      Join Path       ${EXECDIR}        Output\\${GoogleDrivePath}\\${FileName}    
         # ${SavePath}      Join Path       ${EXECDIR}        ${FileName}
 
         #Updating Tracker Excel Status
@@ -119,7 +119,7 @@ Digital Sign Using Sikuli
         END
         Sleep                           ${SHORT_WAIT}           
         Close All Applications
-        
+
         ${Log}           Set Variable    Completed processing digital sign implementation using Sikuli.
         Text File Log    Info            Digital Sign Using Sikuli    ${Log}
         Log              ${Log}

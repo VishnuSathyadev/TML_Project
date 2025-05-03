@@ -893,8 +893,10 @@ Setting Filters And Uploading Invoices
                                 ${ExtractExcelName}        Set Variable                         ${BranchLocation}_${CurrentMonth}_${CurrentYear}.xlsx
 
                                 #Setting Download Path
-                                ${DownloadPath}            Set Variable                         ${EXECDIR}/Input/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}/${CurrentDate}   
+                                ${DownloadPath}            Set Variable                         ${EXECDIR}/Input/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}/${CurrentDate}
+                                ${SignSavePath}            Set Variable                         ${EXECDIR}/Output/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}/${CurrentDate}   
                                 ${Status}                  Create Provided Directory            ${DownloadPath}
+                                ${Status}                  Create Provided Directory            ${SignSavePath}
                                 ${ExcelFilePath}           Set Variable                         ${EXECDIR}/Input/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}
                                 ${GoogleDrivePath}         Set Variable                         GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}/${CurrentDate}
                                 ${ExcelPath}               Join Path                            ${ExcelFilePath}        ${ExtractExcelName}      
@@ -1084,7 +1086,7 @@ Setting Filters And Uploading Invoices
 
                                             # Invoking Digital Signing Process Keyword
                                             IF  ('${ExcelTrackerData[0]}[Digital Sign]' != 'Completed') and ('${DigitalSignStatus}' == 'False')
-                                                ${DigitalSignStatus}           ${InvoicePath}         Digital Sign Using Sikuli    ${InvoicePath}    ${TmlRefNumber}    ${InvoiceType}    ${CLIENT_CONFIG}[Digital Signature Pin]
+                                                ${DigitalSignStatus}           ${InvoicePath}         Digital Sign Using Sikuli    ${InvoicePath}    ${TmlRefNumber}    ${InvoiceType}    ${CLIENT_CONFIG}[Digital Signature Pin]    ${GoogleDrivePath}
                                                 IF  ${DigitalSignStatus}
                                                     ${Log}                     Set Variable           Digital signing process completed successfully.
                                                     Text File Log              Info                   Setting Filters And Uploading Invoices         ${Log}
