@@ -1,0 +1,23 @@
+# For more details on the format and content:
+# https://github.com/robocorp/rcc/blob/master/docs/recipes.md#what-is-in-condayaml
+# Tip: Adding a link to the release notes of the packages helps maintenance and security.
+
+channels:
+  - conda-forge
+
+dependencies:
+  - nodejs=22.13.0
+  - python=3.11.9                   # https://pyreadiness.org/3.10
+  - pip=24.3.1                      # https://pip.pypa.io/en/stable/news
+  - robocorp-truststore=0.8.0       # https://pypi.org/project/robocorp-truststore/
+  - pip:
+    - rpaframework==30.0.2          # https://rpaframework.org/releasenotes.
+    - pandas==2.2.3
+    - robotframework-sikuliLibrary==2.0.3
+    - robotframework-browser==19.4.0
+    - robotframework-seleniumlibrary==6.7.1
+    - google-api-python-client==2.169.0
+    - google-auth-httplib2==0.2.0
+    - google-auth-oauthlib==1.2.2
+rccPostInstall:
+    - rfbrowser init

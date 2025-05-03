@@ -1,0 +1,91 @@
+*** Settings ***
+Documentation       Template robot main suite.
+Resource            PageActions/ConfigManagement.robot
+Resource            PageActions/InitialActions.robot
+Resource            PageActions/InvoiceTmlProcess.robot
+Resource            PageActions/EmailProcesses.robot
+Resource            PageActions/TextLog.robot
+Resource            PageActions/Status.robot
+Library             Libraries/ExcelOperations.py
+Variables           Variables/GlobalVariables.py
+Library             Libraries/Common.py
+Library             Libraries/ExcelOperations.py
+Library             RPA.Browser.Selenium
+Library             XML
+
+*** Tasks ***
+        
+Popular TML Process
+    TRY
+        ${Log}               Set Variable    Started processing Popular TML Process.
+        Text File Log        Info            Popular TML Process    ${Log}
+        Log                  ${Log}
+
+        #Reading Config File for Bot
+        ${BotConfigStatus}    Read Config File
+        IF  ${BotConfigStatus}
+            ${Log}           Set Variable    Successfully completed reading bot config file.
+            Text File Log    Info            Popular TML Process    ${Log}
+            Log              ${Log}   
+        ELSE
+            ${Log}           Set Variable    Exception occurred while reading bot config file.
+            Text File Log    Error           Popular TML Process    ${Log}
+            Fail             ${Log} 
+        END
+
+        #Reading Client Config Sheet which returns Dataframe and list of Login IDs
+        ${ClientConfigStatus}    ${ListOfLoginId}    ${DataTable}    Read Client Config File
+        IF  ${ClientConfigStatus}
+            ${Log}           Set Variable    Successfully completed reading client config file.
+            Text File Log    Info            Popular TML Process    ${Log}
+            Log              ${Log}
+        ELSE
+            ${Log}           Set Variable    Exception occurred while reading client config file.
+            Text File Log    Error           Popular TML Process    ${Log}
+            Fail             ${Log}
+        END
+
+        #Invoking Open Website Keyword
+        ${Status}            Open Website
+        IF  ${Status}
+            ${Log}           Set Variable    Successfully opened login page.
+            Text File Log    Info            Popular TML Process    ${Log}
+            Log              ${Log}
+        ELSE
+            ${Log}           Set Variable    Exception occurred while opening login page.
+            Text File Log    Error           Popular TML Process    ${Log}
+            Fail             ${Log}
+        END
+
+        #Looping through each LoginID from config sheet
+        ${Status}    TML Invoice Process Loop    ${ListOfLoginId}    ${DataTable}
+        IF  ${Status}
+            ${Log}           Set Variable    Successfully completed TML Loop.
+            Text File Log    Info            Popular TML Process    ${Log}
+            Log              ${Log}
+        ELSE
+            ${Log}           Set Variable    Exception occurred while processing TML Loop.
+            Text File Log    Error           Popular TML Process    ${Log}
+            Fail             ${Log}
+        END
+
+        #Invoking End Job Report Email Keyword
+        ${MailStatus}        End Job Report Email    ${StatusFilePath}
+        IF  ${MailStatus}
+            ${Log}           Set Variable    Successfully completed TML End Job Report Mail.
+            Text File Log    Info            Popular TML Process    ${Log}
+            Log              ${Log}
+        ELSE
+            ${Log}           Set Variable    Exception occurred while processing TML End Job Report Mail.
+            Text File Log    Error           Popular TML Process    ${Log}
+            Fail             ${Log}
+        END
+        
+        ${Log}               Set Variable    Completed processing Popular TML Process.
+        Text File Log        Info            Popular TML Process    ${Log}
+        Log                  ${Log}
+        
+    EXCEPT         AS        ${Exception}
+        Log                  ${Exception}
+        Text File Log        Error          Popular TML Process    ${Exception}
+    END
