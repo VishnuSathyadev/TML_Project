@@ -21,6 +21,21 @@ Retry Scenario Login
         Text File Log           Info            Retry Scenario Login    ${Log}
         Log                     ${Log}
 
+        #Closing IFrame Page
+        RPA.Browser.Playwright.Close Page
+
+        #Logging out from SAP System
+        ${LogoutStatus}         Logout Portal
+        IF  ${LogoutStatus}
+            ${Log}              Set Variable    Successfully logged out from SAP system.
+            Text File Log       Info            Retry Scenario Login    ${Log}
+            Log                 ${Log}
+        ELSE
+            ${Log}              Set Variable    Attempt to log out from the SAP system was a failure.
+            Text File Log       Error           Retry Scenario Login    ${Log}
+            Log                 ${Log}
+        END
+
         #Close Current Browser
         RPA.Browser.Playwright.Close Browser
         
