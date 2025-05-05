@@ -28,12 +28,14 @@ ${Column2}
 &{Data}    
 ${DownloadFolderPath}    C:/Users/Vishnu Sathyadev/Desktop/TML Project/SUPPORTING DOC_2.xlsx
 ${PageDropdownValue}    10
-${StatusFilePath}       C:\\tml-integration_branch\\Input\\000208299601052025_WAR.
+${StatusFilePath}       C:\\tml-integration_branch\\Input\\000208299601052025_WAR.pdf
 ${$GoogleDrivePath}        GST_Invoices/Kollam/2025/May/29-05-2025
 @{FolderList}       Test     Test2
 
 *** Tasks ***
 TestTask
+    Open File    ${StatusFilePath}
+    RPA.Windows.Control Window    name:"AV2DocumentTabView"
     ${FolderIdPdf}    Create Nested Folders    ${FolderList}    1nBXAMP28x_bG5B_yFbg2vK_9D2ckjaKT
     ${FileExistInDrive}       Check File Exists    1lhq_zUW-vbdE65NSbxkQdkWFdmznVNk5    StatusExcel.xlsx 
 

@@ -39,9 +39,11 @@ Digital Sign Using Sikuli
         ${Status}                  Update Excel Rows      ${StatusFilePath}       ${TrackerSheetName}     ${ReadDictionary}    ${StatusDictionary}
         Remove From Dictionary     ${ReadDictionary}      Invoice Type            Reference No
         Remove From Dictionary     ${StatusDictionary}    Digital Sign 
-
-        RPA.Desktop.Open File      ${PdfFilePath}
-        Sleep    3s
+        
+        #Opening and taking control of PDF
+        RPA.Desktop.Open File         ${PdfFilePath}
+        RPA.Windows.Control Window    name:"AV2DocumentTabView"
+        Sleep                         ${DEFAULT_WAIT}
 
         # Start the Sikuli application
         Start Sikuli Process
