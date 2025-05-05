@@ -592,10 +592,10 @@ Setting Filters And Generate Invoices
                                             END
                                         END
                                     END
-                                    ${LoaderInvisibleCheck}        Wait Until Element Available With Timeout    ${loc_loader_display}      ${DEFAULT_WAIT}
+                                    ${LoaderInvisibleCheck}        Wait Until Element Available With Timeout    ${loc_loader_display}            ${DEFAULT_WAIT}
                                     ${LoaderInvisibleCheck}        Wait Until Element Dissapears                ${loc_loader_display}
                                     ${WarrantyScreenCheck}         Wait Until Element Available                 ${loc_gst_screen_header}
-                                    ${ActionButtonExist}           Wait Until Element Available With Timeout    ${loc_action_button}        ${DEFAULT_WAIT}
+                                    ${ActionButtonExist}           Wait Until Element Available With Timeout    ${loc_row_one_action_button}     ${DEFAULT_WAIT}
                                     IF  ${WarrantyScreenCheck} and ${ActionButtonExist}
                                         ${CountText}               Get Text Action         ${loc_invoice_count}
                                         ${RegexOut}                Get Regexp Matches      ${CountText}              ${InvoiceCount_Regex}
@@ -703,6 +703,8 @@ Generate IRN and GST Invoices
         
         ${LoaderInvisibleCheck}    Wait Until Element Dissapears   ${loc_loader_display}   
         ${IsGenerateIrnExists}     Wait Until Element Available    ${loc_generate_irn}
+
+        ${TmlVisibleCheck}         Wait Until Element Available    ${loc_tml_row_one_inside}
         
         IF  ${IsGenerateIrnExists}
             Set To Dictionary          ${ReadDictionary}      Invoice Type             ${InvoiceType}    
@@ -1166,7 +1168,7 @@ Setting Filters And Uploading Invoices
                                                 Click Element Action        ${loc_gstirn_close_button}
                                             END
 
-                                            ${ActionButtonExist}            Element Visible Action          ${loc_action_button}        
+                                            ${ActionButtonExist}            Element Visible Action          ${loc_row_one_action_button}        
                                             IF  ${ActionButtonExist}
                                                 ${FirstPageButtonExist}     Wait Until Element Available    ${loc_first_page_disabled}
                                             END
@@ -1179,7 +1181,7 @@ Setting Filters And Uploading Invoices
                                                 Click Element Action        ${loc_gstirn_close_button}
                                             END
 
-                                            ${ActionButtonExist}            Element Visible Action          ${loc_action_button}        
+                                            ${ActionButtonExist}            Element Visible Action          ${loc_row_one_action_button}        
                                             IF  ${ActionButtonExist}
                                                 ${FirstPageButtonExist}     Wait Until Element Available    ${loc_first_page_disabled}
                                             END
@@ -1210,10 +1212,10 @@ Setting Filters And Uploading Invoices
                                         END
                                     END
 
-                                    ${LoaderInvisibleCheck}        Wait Until Element Available With Timeout    ${loc_loader_display}      ${DEFAULT_WAIT}
+                                    ${LoaderInvisibleCheck}        Wait Until Element Available With Timeout    ${loc_loader_display}            ${DEFAULT_WAIT}
                                     ${LoaderInvisibleCheck}        Wait Until Element Dissapears                ${loc_loader_display}
                                     ${WarrantyScreenCheck}         Wait Until Element Available                 ${loc_gst_screen_header}
-                                    ${ActionButtonExist}           Wait Until Element Available With Timeout    ${loc_action_button}        ${DEFAULT_WAIT}
+                                    ${ActionButtonExist}           Wait Until Element Available With Timeout    ${loc_row_one_action_button}     ${SHORT_WAIT}
                                     IF  ${WarrantyScreenCheck} and ${ActionButtonExist}
                                         ${CountText}               Get Text Action                 ${loc_invoice_count}
                                         ${RegexOut}                Get Regexp Matches              ${CountText}              ${InvoiceCount_Regex}

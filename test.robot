@@ -28,12 +28,16 @@ ${Column2}
 &{Data}    
 ${DownloadFolderPath}    C:/Users/Vishnu Sathyadev/Desktop/TML Project/SUPPORTING DOC_2.xlsx
 ${PageDropdownValue}    10
-${StatusFilePath}       C:\\tml-integration_branch\\Input\\000208299601052025_WAR.pdf
+${StatusFilePath}       C:\\tml-integration_branch\\Input\\000208299601052025_WAR.
+${$GoogleDrivePath}        GST_Invoices/Kollam/2025/May/29-05-2025
+@{FolderList}       Test     Test2
 
 *** Tasks ***
 TestTask
+    ${FolderIdPdf}    Create Nested Folders    ${FolderList}    1nBXAMP28x_bG5B_yFbg2vK_9D2ckjaKT
+    ${FileExistInDrive}       Check File Exists    1lhq_zUW-vbdE65NSbxkQdkWFdmznVNk5    StatusExcel.xlsx 
 
-    Digital Sign Using Sikuli    ${StatusFilePath}    1245    AMC    ABCD@1234
+    Digital Sign Using Sikuli    ${StatusFilePath}    1245    AMC    ABCD@1234     ${$GoogleDrivePath}
     # New Browser            chromium       headless=${False}
     # New Page             https://demo.automationtesting.in/Frames.html
     Sleep                ${SHORT_WAIT}    

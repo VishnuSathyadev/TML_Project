@@ -45,6 +45,7 @@ loc_submit                  = '//div[@class="ui buttons"]//button[contains (text
 loc_save_claim_popup        = '//span[text()="Save Claim"]' 
 loc_popup_submit            = '//span[text()="Yes"]'
 loc_gstirn_close_button     = '//div[@id="modal_invoice_details"]//i[@class="close icon"]'
+loc_tml_row_one_inside      = '(//html//body//tr[1]/td[5])[2]'
 loc_irn_generated           = '(//table[contains(@id, "pn_id")]//tbody//tr//td[8][normalize-space(text())])[1]'
 
 #---------------------------------------Downloading & Uploading of IRN and GST----------------------------------

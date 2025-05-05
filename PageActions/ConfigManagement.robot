@@ -203,7 +203,7 @@ Wait Until Element Dissapears
             Run Keyword If       ${ElementVisible}         Log                Element does not dissapers yet, checking again...
             # Sleep              ${DEFAULT_WAIT}
             ${Iteration}         Evaluate                  ${Iteration} + 1
-            IF  ${Iteration} == 30
+            IF  ${Iteration} == 40
                 BREAK 
             END     
         END
