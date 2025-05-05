@@ -1096,11 +1096,11 @@ Setting Filters And Uploading Invoices
                                                     Set To Dictionary          ${ReadDictionary}      Invoice Type             ${InvoiceType}    
                                                     Set To Dictionary          ${ReadDictionary}      Reference No             ${TmlRefNumber}
                                                     Set To Dictionary          ${StatusDictionary}    Digital Sign             Completed 
-                                                    Set To Dictionary          ${StatusDictionary}    Status                   
-                                                    Set To Dictionary          ${StatusDictionary}    Comments                 
+                                                    Set To Dictionary          ${StatusDictionary}    Status                   Digital Sign Completed.
+                                                    Set To Dictionary          ${StatusDictionary}    Comments                 ${Log}
                                                     ${Status}                  Update Excel Rows      ${StatusFilePath}        ${TrackerSheetName}     ${ReadDictionary}    ${StatusDictionary}
                                                     Remove From Dictionary     ${ReadDictionary}      Invoice Type             Reference No
-                                                    Remove From Dictionary     ${StatusDictionary}    Digital Sign             Status                Comments
+                                                    Remove From Dictionary     ${StatusDictionary}    Digital Sign             Status                  Comments
                                                 ELSE
                                                     ${Log}                     Set Variable           Exception occurred while digitally signing the invoice.
                                                     Text File Log              Error                  Setting Filters And Uploading Invoices         ${Log}
@@ -1112,7 +1112,7 @@ Setting Filters And Uploading Invoices
                                                         Set To Dictionary          ${StatusDictionary}    Comments                 ${Log}
                                                         ${Status}                  Update Excel Rows      ${StatusFilePath}        ${TrackerSheetName}     ${ReadDictionary}    ${StatusDictionary}
                                                         Remove From Dictionary     ${ReadDictionary}      Invoice Type             Reference No
-                                                        Remove From Dictionary     ${StatusDictionary}    Digital Sign             Status                Comments
+                                                        Remove From Dictionary     ${StatusDictionary}    Digital Sign             Status                  Comments
                                                    END
                                                    Fail                            ${Log}
                                                 END

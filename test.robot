@@ -34,9 +34,9 @@ ${$GoogleDrivePath}        GST_Invoices/Kollam/2025/May/29-05-2025
 
 *** Tasks ***
 TestTask
-    Open File    ${StatusFilePath}
-    RPA.Windows.Control Window    name:"AV2DocumentTabView"
-    ${FolderIdPdf}    Create Nested Folders    ${FolderList}    1nBXAMP28x_bG5B_yFbg2vK_9D2ckjaKT
+    # Open File    ${StatusFilePath}
+    # RPA.Windows.Control Window    name:"AV2DocumentTabView"
+    # ${FolderIdPdf}    Create Nested Folders    ${FolderList}    1nBXAMP28x_bG5B_yFbg2vK_9D2ckjaKT
     ${FileExistInDrive}       Check File Exists    1lhq_zUW-vbdE65NSbxkQdkWFdmznVNk5    StatusExcel.xlsx 
 
     Digital Sign Using Sikuli    ${StatusFilePath}    1245    AMC    ABCD@1234     ${$GoogleDrivePath}
