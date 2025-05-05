@@ -56,13 +56,13 @@ TML Invoice Process Loop
         Set GlobalVariable     ${MaxRetries}    ${ConfigRetryCount}
 
         #Set Designation Path
-        ${DesignationPath}    Set Variable      ${EXECDIR}/Input/${StatusFileName}
+        ${DesignationPath}    Set Variable      ${EXECDIR}/Input/${CLIENT_CONFIG}[StatusFileName]
 
         #Check whether file exist in Status folder in Google Drive
-        ${FileExistInDrive}       Check File Exists    ${StatusFolderId}    ${StatusFileName} 
+        ${FileExistInDrive}       Check File Exists    ${CLIENT_CONFIG}[StatusFolderId]    ${CLIENT_CONFIG}[StatusFileName] 
         IF  ${FileExistInDrive}
             ${ForcedRunEnable}    Evaluate         True
-            ${DownloadStatus}     Download File    ${StatusFolderId}    ${StatusFileName}    ${DesignationPath}
+            ${DownloadStatus}     Download File    ${CLIENT_CONFIG}[StatusFolderId]    ${CLIENT_CONFIG}[StatusFileName]    ${DesignationPath}
             IF  ${DownloadStatus}
                 ${Log}            Set Variable    Status file for forced run downloaded successfully.
                 Text File Log     Info            TML Invoice Process Loop    ${Log}
@@ -1967,7 +1967,7 @@ Uploading Files To Google Drive
         ${FolderList}         Split String    ${GoogleDrivePath}    /    
         
         #Setting the folder Id to upload PDFs
-        ${FolderIdPdf}    Create Nested Folders    ${FolderList}    ${RootFolderId}
+        ${FolderIdPdf}    Create Nested Folders    ${FolderList}    ${CLIENT_CONFIG}[RootFolderId]
 
         IF  ('${FolderIdPdf}' != 'None')
             
@@ -1995,7 +1995,7 @@ Uploading Files To Google Drive
 
         #Setting the folder Id to upload Excel File
         Remove From List      ${FolderList}                -1
-        ${FolderIdExcel}      Create Nested Folders        ${FolderList}        ${RootFolderId}
+        ${FolderIdExcel}      Create Nested Folders        ${FolderList}        ${CLIENT_CONFIG}[RootFolderId]
         IF  ('${FolderIdPdf}' != 'None')
             ${UplaodStatus}       Upload File To Folder    ${FolderIdExcel}     ${ExcelFilePath}
             IF  ${UplaodStatus}

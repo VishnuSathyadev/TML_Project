@@ -38,7 +38,7 @@ End Job Report Email
         ${EmailBody}      Set Variable       The detailed run report for todays run is as follows:\n\n
 
         FOR    ${Attempt}    IN RANGE    ${MaxRetries}
-            ${MailStatus}    SendEmail.SendEmail   ${Subject}   ${EmailBody}   ${RecipientTo}   ${RecipientCc}   ${Attachment}    ${ReportSheetName}    ${SenderEmail}   ${EmailPassword} 
+            ${MailStatus}    SendEmail.SendEmail   ${Subject}   ${EmailBody}   ${RecipientTo}   ${RecipientCc}   ${Attachment}    ${ReportSheetName}    ${CLIENT_CONFIG}[SenderEmail]   ${CLIENT_CONFIG}[EmailPassword]
             IF  ('${MailStatus}' == 'True')
                 ${Log}           Set Variable       Email report sent successfully on attempt ${Attempt+1}.
                 Text File Log    Info               End Job Report Email   ${Log}
