@@ -56,15 +56,15 @@ Retry Scenario Login
             ${LoginStatus}       ${InvalidCredentialStatus}    Login Portal    ${Dictionary}
             IF  ${LoginStatus}
                 ${Log}           Set Variable    Successfully logged into SAP system.
-                Text File Log    Info            TML Invoice Process Loop    ${Log}
+                Text File Log    Info            Retry Scenario Login    ${Log}
                 Log              ${Log} 
             ELSE IF    ${InvalidCredentialStatus}
                 ${Log}           Set Variable    Login failed due to invalid credentials.
-                Text File Log    Error           TML Invoice Process Loop    ${Log}
+                Text File Log    Error           Retry Scenario Login    ${Log}
                 Fail             ${Log}
             ELSE
                 ${Log}           Set Variable    Attempt to log into SAP system was a failure.
-                Text File Log    Error           TML Invoice Process Loop    ${Log}
+                Text File Log    Error           Retry Scenario Login    ${Log}
                 Fail             ${Log}   
             END
         END
@@ -235,5 +235,64 @@ Retry Scenario Invoice Data
     EXCEPT       AS      ${Exception}
         Log              ${Exception}
         Text File Log    Error               Retry Scenario Login    ${Exception}
+        RETURN           False
+    END
+
+Retry Scenario Position
+    [Arguments]        ${Dictionary}
+    TRY
+        ${Log}                  Set Variable    Started processing Retry Scenario Position.
+        Text File Log           Info            Retry Scenario Position    ${Log}
+        Log                     ${Log}
+
+        #Logging out from SAP System
+        ${LogoutStatus}         Logout Portal
+        IF  ${LogoutStatus}
+            ${Log}              Set Variable    Successfully logged out from SAP system.
+            Text File Log       Info            Retry Scenario Position    ${Log}
+            Log                 ${Log}
+        ELSE
+            ${Log}              Set Variable    Attempt to log out from the SAP system was a failure.
+            Text File Log       Error           Retry Scenario Position    ${Log}
+            Log                 ${Log}
+        END
+
+        #Close Current Browser
+        RPA.Browser.Playwright.Close Browser
+        
+        #Invoking Open Website Keyword
+        ${Status}               Open Website
+        IF  ${Status}
+            ${Log}              Set Variable    Successfully opened login page.
+            Text File Log       Info            Retry Scenario Position    ${Log}
+            Log                 ${Log}
+        ELSE
+            ${Log}              Set Variable    Exception occurred while opening login page.
+            Text File Log       Error           Retry Scenario Position    ${Log}
+            Fail                ${Log}
+        END
+
+        ${ReachedHomePage}       Wait Until Element Available With Timeout    ${loc_home_page_check}    ${MEDIUM_WAIT}
+        IF  ('${ReachedHomePage}' == 'False')
+            ${LoginStatus}       ${InvalidCredentialStatus}    Login Portal    ${Dictionary}
+            IF  ${LoginStatus}
+                ${Log}           Set Variable    Successfully logged into SAP system.
+                Text File Log    Info            Retry Scenario Position    ${Log}
+                Log              ${Log} 
+            ELSE IF    ${InvalidCredentialStatus}
+                ${Log}           Set Variable    Login failed due to invalid credentials.
+                Text File Log    Error           Retry Scenario Position    ${Log}
+                Fail             ${Log}
+            ELSE
+                ${Log}           Set Variable    Attempt to log into SAP system was a failure.
+                Text File Log    Error           Retry Scenario Position    ${Log}
+                Fail             ${Log}   
+            END
+        END
+        RETURN                   True
+
+    EXCEPT       AS      ${Exception}
+        Log              ${Exception}
+        Text File Log    Error                  Retry Scenario Position    ${Exception}
         RETURN           False
     END
