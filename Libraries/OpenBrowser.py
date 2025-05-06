@@ -1,6 +1,5 @@
 import subprocess
 
-
 def open_site_url(debug_port):
     try:
 

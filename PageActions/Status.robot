@@ -13,7 +13,7 @@ Variables    ../Variables/GlobalVariables.py
 *** Variables ***
 @{ColumnHeaders}       Login       Position      Invoice Month       Invoice Type     Reference No      Generate IRN & GST	    Download          Digital Sign        Upload            File Name          Processed Date      Status             Comments
 @{ColumnHeaders2}      Login       Position      Invoice Month       Invoice Type     IRN Status        IRN Total	            IRN Success	      IRN Exception	      Upload Status     Upload Total	   Upload Success	   Upload Exception     
-@{ColumnHeaders3}      Login ID    Position      IRN Total	         IRN Success	  IRN Exception	    Upload Total	        Upload Success	  Upload Exception    Status            Invalid Credentials    
+@{ColumnHeaders3}      Login ID    Position      IRN Total	         IRN Success	  IRN Exception	    Upload Total	        Upload Success	  Upload Exception    Status               
 
 *** Keywords ***
 Update Status 

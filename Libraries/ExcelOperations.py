@@ -5,7 +5,6 @@ import pandas as pd
 import openpyxl
 import os
 
-FilePath = r"C:\Users\Vishnu Sathyadev\Documents\Robocorp\Popular TML Invoice Creation\tml\Input\StatusTrackerExcel_16_04_2025_10_57_59.xlsx"
 
 #Function to read a excel sheet
 def read_excel_file(file_path, sheet):
@@ -17,9 +16,6 @@ def read_excel_file(file_path, sheet):
     except Exception as e:
         print(f"An error occurred while reading the excel file: {e}")
 
-# dict= read_excel_file(FilePath, 'Sheet1')
-# print(dict)
-
 def unique_column_values_as_list(df, column_header):
     try:
         # Fetch all unique values in the column as a list
@@ -28,21 +24,12 @@ def unique_column_values_as_list(df, column_header):
     except Exception as e:
         print(f"An error occurred while filtering unique values: {e}")
 
-# Df = read_excel_file(FilePath, 'BOTStatus_TrackerDetailed')
-# list = unique_column_values_as_list(Df, 'Login ID')
-# print(list)
-
-
 def filter_data_table_for_specific_column_value(df, column_name, column_value):
     try:
         filtered_df = df[df[column_name] == column_value]
         return filtered_df.to_dict(orient='records')
     except Exception as e:
         print(f"An error occurred while filtering data frame: {e}")  
-
-# ColumnDic= filter_data_table_for_specific_column_value(Df, 'Reference No', '000200186315042025')
-# print(ColumnDic)
-
 
 def append_data_to_excel(file_path, sheet_name, data_dict):
     try:
@@ -73,7 +60,7 @@ def append_data_to_excel(file_path, sheet_name, data_dict):
 
     except Exception as e:
         print(f"An error occurred while appending data to excel: {e}")
-        
+
 def update_excel_cell(file_path, search_column, search_value, updated_data, sheet):
     try:
         # Load the workbook and worksheet
@@ -116,14 +103,6 @@ def update_excel_cell(file_path, search_column, search_value, updated_data, shee
 
     except Exception as e:
         print(f"An error occurred while updating the excel file: {e}")
-
-
-# FilePath = r"C:\Users\Vishnu Sathyadev\Documents\Robocorp\Popular TML Invoice Creation\tml\Input\StatusTrackerExcel_01_04_2025_12_27_31.xlsx"
-# SearchColumn = 'Unique ID'
-# SearchValue = 125465
-# UpdatedData = {'Position': 'Kollam', 'Login': 'ANU2082356'}
-# update_excel_cell(FilePath,SearchColumn,SearchValue,UpdatedData,'BOTStatus_TrackerDetailed')
-# print('test')
 
 def get_column_index(column_name, sheet_name, file_path):
     try:
@@ -178,8 +157,7 @@ def check_value_in_column(file_path, sheet_name, column_name, value_to_check):
 
     except Exception as e:
         print(f"Error: {e}")
-        return False
-    
+        return False    
 
 def update_excel_rows(file_path, sheet_name, match_conditions, update_values):
     try:
@@ -219,7 +197,6 @@ def filter_data_table_for_multiple_column_values(df, conditions_dict):
         return df.to_dict(orient='records')
     except Exception as e:
         print(f"An error occurred while filtering data frame: {e}")
-
 
 def check_values_in_multiple_columns(file_path, sheet_name, column_value_dict):
     try:

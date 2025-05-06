@@ -58,8 +58,11 @@ TML Invoice Process Loop
         #Set Designation Path
         ${DesignationPath}    Set Variable      ${EXECDIR}/Input/${CLIENT_CONFIG}[StatusFileName]
 
+        #Set Current Date
+        ${CurrentDate}        Get Current Date       result_format=%d_%m_%Y
+
         #Check whether file exist in Status folder in Google Drive
-        ${FileExistInDrive}       Check File Exists    ${CLIENT_CONFIG}[StatusFolderId]    ${CLIENT_CONFIG}[StatusFileName] 
+        ${FileExistInDrive}       Check File Exists    ${CLIENT_CONFIG}[StatusFolderId]    ${CurrentDate} 
         IF  ${FileExistInDrive}
             ${ForcedRunEnable}    Evaluate         True
             ${DownloadStatus}     Download File    ${CLIENT_CONFIG}[StatusFolderId]    ${CLIENT_CONFIG}[StatusFileName]    ${DesignationPath}
@@ -145,18 +148,30 @@ TML Invoice Process Loop
                             Log                   ${Log}
                             Set To Dictionary     ${StatusDictionary}      Login ID               ${Dictionary}[Login ID]   
                             Set To Dictionary     ${StatusDictionary}      Status                 Not Completed  
-                            Set To Dictionary     ${StatusDictionary}      Invalid Credentials    False
+                            Set To Dictionary     ${StatusDictionary}      Position               N/A
+                            Set To Dictionary     ${StatusDictionary}      IRN Total              0
+                            Set To Dictionary     ${StatusDictionary}      IRN Success            0
+                            Set To Dictionary     ${StatusDictionary}      IRN Exception          0
+                            Set To Dictionary     ${StatusDictionary}      Upload Total           0
+                            Set To Dictionary     ${StatusDictionary}      Upload Success         0 
+                            Set To Dictionary     ${StatusDictionary}      Upload Exception       0  
     
                             Append Multiple Cells In Excel Row      ${StatusDictionary}       ${StatusFilePath}       ${ReportSheetName} 
-                            Remove From Dictionary                  ${StatusDictionary}       Login ID      Status    Invalid Credentials
+                            Remove From Dictionary                  ${StatusDictionary}       Login ID                Position      IRN Total	   IRN Success	  IRN Exception	    Upload Total	 Upload Success	  Upload Exception    Status    
                         ELSE IF    ${InvalidCredentialStatus}
                             ${RetryCount}         Evaluate                 ${MaxRetries} + 0
                             Set To Dictionary     ${StatusDictionary}      Login ID               ${Dictionary}[Login ID]   
-                            Set To Dictionary     ${StatusDictionary}      Status                 Not Completed  
-                            Set To Dictionary     ${StatusDictionary}      Invalid Credentials    True
+                            Set To Dictionary     ${StatusDictionary}      Status                 Invalid Credentials 
+                            Set To Dictionary     ${StatusDictionary}      Position               N/A
+                            Set To Dictionary     ${StatusDictionary}      IRN Total              0
+                            Set To Dictionary     ${StatusDictionary}      IRN Success            0
+                            Set To Dictionary     ${StatusDictionary}      IRN Exception          0
+                            Set To Dictionary     ${StatusDictionary}      Upload Total           0
+                            Set To Dictionary     ${StatusDictionary}      Upload Success         0 
+                            Set To Dictionary     ${StatusDictionary}      Upload Exception       0   
     
                             Append Multiple Cells In Excel Row      ${StatusDictionary}       ${StatusFilePath}       ${ReportSheetName} 
-                            Remove From Dictionary                  ${StatusDictionary}       Login ID      Status    Invalid Credentials
+                            Remove From Dictionary                  ${StatusDictionary}       Login ID                Position      IRN Total	   IRN Success	  IRN Exception	    Upload Total	 Upload Success	  Upload Exception    Status    
                             BREAK
                         ELSE
                             RPA.Browser.Playwright.Close Browser
@@ -901,7 +916,7 @@ Setting Filters And Uploading Invoices
                                 ${Status}                  Create Provided Directory            ${SignSavePath}
                                 ${ExcelFilePath}           Set Variable                         ${EXECDIR}/Input/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}
                                 ${GoogleDrivePath}         Set Variable                         GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}/${CurrentDate}
-                                ${ExcelPath}               Join Path                            ${ExcelFilePath}        ${ExtractExcelName}      
+                                ${ExcelPath}               RPA.FileSystem.Join Path             ${ExcelFilePath}        ${ExtractExcelName}      
                                 
                                 #Checking whether dropdown value as 100 already selected
                                 ${AlreadyDropdownSelected}     Element Visible Action           ${loc_dropdown_hudread}
@@ -1522,7 +1537,7 @@ Download GST Invoice
         # Type Into          ${loc_download_path_field}    ${Path}         
         # Click Into         ${loc_save_button_download}
         
-        ${Path}                    Join Path            ${DownloadPath}    ${FileName}
+        ${Path}     RPA.FileSystem.Join Path            ${DownloadPath}    ${FileName}
         ${FileCheck}               File Exist           ${Path}
         IF  (${FileCheck})
             RPA.FileSystem.Remove File                  ${Path}
@@ -1974,7 +1989,7 @@ Uploading Files To Google Drive
         IF  ('${FolderIdPdf}' != 'None')
             
             #Setting the list of all PDFs in the specified location
-            ${PdfFiles}    List Files In Directory    ${PdfPath} 
+            ${PdfFiles}    RPA.FileSystem.List Files In Directory    ${PdfPath} 
 
             FOR    ${File}    IN     @{PdfFiles}
                 ${FileName}          Get File Name            ${File}
@@ -2014,6 +2029,23 @@ Uploading Files To Google Drive
             Text File Log         Error           Uploading Files To Google Drive    ${Log}
             Log                   ${Log} 
         END
+
+        #Uploading the Tracker Excel To Google rive        
+        ${UplaodStatus}       Upload File To Folder        ${CLIENT_CONFIG}[StatusFolderId]     ${StatusFilePath}
+        IF  ${UplaodStatus}
+            ${Log}            Set Variable    Successfully uploaded the Tracker Excel File to Google Drive.
+            Text File Log     Info            Uploading Files To Google Drive    ${Log}
+            Log               ${Log}
+        ELSE
+            ${Log}            Set Variable    Exception occurred while uploading the Tracker Excel File to Google Drive.
+            Text File Log     Error           Uploading Files To Google Drive    ${Log}
+            Log               ${Log}
+        END
+
+        ${Log}                Set Variable     Completed uploading files To Google Drive.
+        Text File Log         Info             Uploading Files To Google Drive     ${Log}
+        Log                   ${Log}
+        RETURN                True
 
         ${Log}                Set Variable     Completed uploading files To Google Drive.
         Text File Log         Info             Uploading Files To Google Drive     ${Log}

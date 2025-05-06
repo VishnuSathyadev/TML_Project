@@ -27,9 +27,9 @@ Digital Sign Using Sikuli
         Text File Log    Info            Digital Sign Using Sikuli    ${Log}
         Log              ${Log}
 
-        ${Parts}         Split String    ${PdfFilePath}    \\
-        ${FileName}      Set Variable    ${Parts}[-1]
-        ${SavePath}      Join Path       ${EXECDIR}        Output\\${GoogleDrivePath}\\${FileName}    
+        ${Parts}         Split String                ${PdfFilePath}    \\
+        ${FileName}      Set Variable                ${Parts}[-1]
+        ${SavePath}      RPA.FileSystem.Join Path    ${EXECDIR}        Output\\${GoogleDrivePath}\\${FileName}    
         # ${SavePath}      Join Path       ${EXECDIR}        ${FileName}
 
         #Updating Tracker Excel Status

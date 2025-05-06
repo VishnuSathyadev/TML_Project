@@ -81,6 +81,9 @@ Popular TML Process
             Fail             ${Log}
         END
         
+        #Deleting Status Tracker File
+        RPA.FileSystem.Remove File           ${StatusFilePath}
+
         ${Log}               Set Variable    Completed processing Popular TML Process.
         Text File Log        Info            Popular TML Process    ${Log}
         Log                  ${Log}

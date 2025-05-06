@@ -1,19 +1,3 @@
-"""
-    Sends an email with an HTML body and an Excel attachment.
-    
-    Parameters:
-    - Subject: Subject of the email.
-    - EmailBody: Body content shown above the table.
-    - RecipientTo: Semicolon-separated string of "To" recipients.
-    - RecipientCc: Semicolon-separated string of "Cc" recipients.
-    - Attachment: Path to the Excel file to be attached and shown as HTML table.
-    - SenderEmail: Gmail address used to send the email.
-    - EmailPassword: App password for the Gmail account.
-    
-    Returns:
-    - Status string indicating success or failure.
-"""
-
 import pandas as pd
 import smtplib
 from email.message import EmailMessage

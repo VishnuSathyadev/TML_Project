@@ -26,9 +26,6 @@ def get_previous_month(date_str):
     except Exception as e:
         print(f"An error occurred while converting current month to previous month: {e}")
 
-# previou= get_previous_month('Mar-2025')
-# print(previou)
-
 def delete_pdf_files(folder_path):
     try:
         pdf_files = glob.glob(os.path.join(folder_path, "*.pdf"))  # Get all PDF files

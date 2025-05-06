@@ -8,11 +8,6 @@ from google.oauth2 import service_account
 import os
 import io
 
-# If modifying these SCOPES, delete the file token.json.
-# SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
-
-
-
 #Authenticate Google Drive using a service account
 def authenticate_service_account():
     try:
@@ -35,7 +30,7 @@ def check_file_exists(folder_id, file_name):
     try:
         service = authenticate_service_account()
         # Query to find files with the specific name in the specific folder
-        query = f"name = '{file_name}' and '{folder_id}' in parents and trashed = false"
+        query = f"name contains '{file_name}' and '{folder_id}' in parents and trashed = false"
         
         # Execute the query
         results = service.files().list(
