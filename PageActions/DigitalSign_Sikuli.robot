@@ -29,7 +29,7 @@ Digital Sign Using Sikuli
 
         ${Parts}         Split String                ${PdfFilePath}    \\
         ${FileName}      Set Variable                ${Parts}[-1]
-        ${SavePath}      RPA.FileSystem.Join Path    ${EXECDIR}        Output\\${GoogleDrivePath}\\${FileName}    
+        ${SavePath}      RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    Output\\${GoogleDrivePath}\\${FileName}    
         # ${SavePath}      Join Path       ${EXECDIR}        ${FileName}
 
         #Updating Tracker Excel Status

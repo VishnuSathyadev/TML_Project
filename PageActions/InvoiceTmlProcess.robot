@@ -909,12 +909,12 @@ Setting Filters And Uploading Invoices
                                 ${CurrentDate}             Get Current Date                     result_format=${NormalDateFormat}
                                 ${ExtractExcelName}        Set Variable                         ${BranchLocation}_${CurrentMonth}_${CurrentYear}.xlsx
 
-                                #Setting Download Path
-                                ${DownloadPath}            Set Variable                         ${EXECDIR}/Input/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}/${CurrentDate}
-                                ${SignSavePath}            Set Variable                         ${EXECDIR}/Output/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}/${CurrentDate}   
+                                #Setting Download Paths
+                                ${DownloadPath}            Set Variable                         ${CONFIG}[ClaimsFolderPath]/Input/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}/${CurrentDate}
+                                ${SignSavePath}            Set Variable                         ${CONFIG}[ClaimsFolderPath]/Output/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}/${CurrentDate}   
                                 ${Status}                  Create Provided Directory            ${DownloadPath}
                                 ${Status}                  Create Provided Directory            ${SignSavePath}
-                                ${ExcelFilePath}           Set Variable                         ${EXECDIR}/Input/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}
+                                ${ExcelFilePath}           Set Variable                         ${CONFIG}[ClaimsFolderPath]/Input/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}
                                 ${GoogleDrivePath}         Set Variable                         GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}/${CurrentDate}
                                 ${ExcelPath}               RPA.FileSystem.Join Path             ${ExcelFilePath}        ${ExtractExcelName}      
                                 
