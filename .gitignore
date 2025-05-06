@@ -1,4 +1,4 @@
-output/
+Output/
 venv/
 temp/
 .rpa/
@@ -18,3 +18,5 @@ testrun/*
 log.html
 report.html
 output.xml
+service_token.json
+Sikuli_java*
