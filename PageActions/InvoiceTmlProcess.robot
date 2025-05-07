@@ -1079,7 +1079,7 @@ Setting Filters And Uploading Invoices
 
                                             #Invoking Download GST Invoice Process Keyword
                                             IF  ('${ExcelTrackerData[0]}[Download]' != 'Completed') and ('${DownloadStatus}' == 'False')
-                                                ${DownloadStatus}    ${InvoicePath}    Download GST Invoice    ${DownloadPath}    ${InvoiceName}    ${TmlRefNumber}    ${InvoiceType}
+                                                ${DownloadStatus}    ${DownloadInvoicePath}    Download GST Invoice    ${DownloadPath}    ${InvoiceName}    ${TmlRefNumber}    ${InvoiceType}
                                                 IF  ${DownloadStatus}
                                                     ${Log}                     Set Variable           Download invoice process completed successfully.
                                                     Text File Log              Info                   Setting Filters And Uploading Invoices         ${Log}
@@ -1111,7 +1111,7 @@ Setting Filters And Uploading Invoices
 
                                             # Invoking Digital Signing Process Keyword
                                             IF  ('${ExcelTrackerData[0]}[Digital Sign]' != 'Completed') and ('${DigitalSignStatus}' == 'False')
-                                                ${DigitalSignStatus}           ${InvoicePath}         Digital Sign Using Sikuli    ${InvoicePath}    ${TmlRefNumber}    ${InvoiceType}    ${CLIENT_CONFIG}[Digital Signature Pin]    ${GoogleDrivePath}
+                                                ${DigitalSignStatus}           ${InvoicePath}         Digital Sign Using Sikuli    ${DownloadInvoicePath}    ${TmlRefNumber}    ${InvoiceType}    ${CLIENT_CONFIG}[Digital Signature Pin]    ${GoogleDrivePath}
                                                 IF  ${DigitalSignStatus}
                                                     ${Log}                     Set Variable           Digital signing process completed successfully.
                                                     Text File Log              Info                   Setting Filters And Uploading Invoices         ${Log}
