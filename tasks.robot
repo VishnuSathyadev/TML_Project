@@ -81,6 +81,17 @@ Popular TML Process
             Fail             ${Log}
         END
         
+        ${UploadToDriveStatus}               Uploading Status Excel To Google Drive
+        IF  ${UploadToDriveStatus}
+            ${Log}           Set Variable    Successfully uploaded the tracker excel to Google Drive.
+            Text File Log    Info            Popular TML Process    ${Log}
+            Log              ${Log}
+        ELSE
+            ${Log}           Set Variable    Exception occurred while uploading the tracker excel to Google Drive.
+            Text File Log    Error           Popular TML Process    ${Log}
+            Log              ${Log}
+        END
+
         #Deleting Status Tracker File
         RPA.FileSystem.Remove File           ${StatusFilePath}
 

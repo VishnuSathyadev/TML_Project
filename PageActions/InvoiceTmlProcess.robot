@@ -2038,6 +2038,23 @@ Uploading Files To Google Drive
             Log                   ${Log} 
         END
 
+        ${Log}                Set Variable     Completed uploading files To Google Drive.
+        Text File Log         Info             Uploading Files To Google Drive     ${Log}
+        Log                   ${Log}
+        RETURN                True             
+    EXCEPT    AS    ${Exception}
+        Text File Log         Error            Uploading Files To Google Drive     ${Exception}
+        Log                   ${Exception}     
+        RETURN                False            
+    END
+
+Uploading Status Excel To Google Drive
+    [Arguments]    
+    TRY
+        ${Log}                Set Variable    Started uploading the tracker excel to Google Drive.
+        Text File Log         Info            Uploading Status Excel To Google Drive    ${Log}
+        Log                   ${Log}
+        
         #Uploading the Tracker Excel To Google rive        
         ${UplaodStatus}       Upload File To Folder        ${CLIENT_CONFIG}[StatusFolderId]     ${StatusFilePath}
         IF  ${UplaodStatus}
@@ -2050,17 +2067,12 @@ Uploading Files To Google Drive
             Log               ${Log}
         END
 
-        ${Log}                Set Variable     Completed uploading files To Google Drive.
-        Text File Log         Info             Uploading Files To Google Drive     ${Log}
-        Log                   ${Log}
-        RETURN                True
-
-        ${Log}                Set Variable     Completed uploading files To Google Drive.
-        Text File Log         Info             Uploading Files To Google Drive     ${Log}
+        ${Log}                Set Variable     Completed uploading tracker excel to Google Drive.
+        Text File Log         Info             Uploading Status Excel To Google Drive     ${Log}
         Log                   ${Log}
         RETURN                True             
     EXCEPT    AS    ${Exception}
-        Text File Log         Error            Uploading Files To Google Drive     ${Exception}
+        Text File Log         Error            Uploading Status Excel To Google Drive     ${Exception}
         Log                   ${Exception}     
         RETURN                False            
     END
