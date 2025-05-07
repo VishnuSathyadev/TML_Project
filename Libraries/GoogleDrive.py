@@ -42,15 +42,16 @@ def check_file_exists(folder_id, file_name):
         files = results.get('files', [])
         
         if files:
+            file_info = files[0]    
             print(f"File '{file_name}' exists in the specified folder.")
             print(f"File ID: {files[0]['id']}")
-            return True
+            return True, file_info['name']
         else:
             print(f"File '{file_name}' does not exist in the specified folder.")
-            return False      
+            return False, None     
     except HttpError as error:
         print(f"An error occurred: {error}")
-        return False
+        return False, None
 
 
 #Function to create a folder in Google Drive    

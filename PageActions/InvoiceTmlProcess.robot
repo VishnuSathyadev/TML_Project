@@ -55,17 +55,16 @@ TML Invoice Process Loop
         ${ConfigRetryCount}    Evaluate         ${CONFIG}[RetryCount]
         Set GlobalVariable     ${MaxRetries}    ${ConfigRetryCount}
 
-        #Set Designation Path
-        ${DesignationPath}    Set Variable      ${EXECDIR}/Input/${CLIENT_CONFIG}[StatusFileName]
-
         #Set Current Date
         ${CurrentDate}        Get Current Date       result_format=%d_%m_%Y
 
         #Check whether file exist in Status folder in Google Drive
-        ${FileExistInDrive}       Check File Exists    ${CLIENT_CONFIG}[StatusFolderId]    ${CurrentDate} 
+        ${FileExistInDrive}       ${StatusFileName}    Check File Exists    ${CLIENT_CONFIG}[StatusFolderId]    ${CurrentDate} 
         IF  ${FileExistInDrive}
+            #Set Designation Path
+            ${DesignationPath}    Set Variable     ${EXECDIR}/Input/${StatusFileName}
             ${ForcedRunEnable}    Evaluate         True
-            ${DownloadStatus}     Download File    ${CLIENT_CONFIG}[StatusFolderId]    ${CLIENT_CONFIG}[StatusFileName]    ${DesignationPath}
+            ${DownloadStatus}     Download File    ${CLIENT_CONFIG}[StatusFolderId]    ${StatusFileName}    ${DesignationPath}
             IF  ${DownloadStatus}
                 ${Log}            Set Variable    Status file for forced run downloaded successfully.
                 Text File Log     Info            TML Invoice Process Loop    ${Log}
