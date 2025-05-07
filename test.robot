@@ -13,6 +13,7 @@ Library             Libraries/Common.py
 Library             Libraries/ExcelOperations.py
 Library             RPA.Browser.Selenium
 Library             XML
+Library    RPA.Email.ImapSmtp
 
 *** Variables ***
 ${TEXT}    000208299630032025
@@ -43,8 +44,14 @@ TestTask
     # RPA.Windows.Control Window    name:"AV2DocumentTabView"
     # ${FolderIdPdf}    Create Nested Folders    ${FolderList}    1nBXAMP28x_bG5B_yFbg2vK_9D2ckjaKT
 
+
+    ${FolderList}    RPA.FileSystem.List Directories In Directory     D:\\TML_Claims\\Uploads\\GST_Invoices
+
     # ${MailStatus}    SendEmail.SendEmail   ${Subject}   ${EmailBody}   ${RecipientTo}   ${RecipientCc}   ${Attachment}    ${ReportSheetName}    cor.rpa.srvclaims@pmmil.com    udzn ybdc jaif akvx 
-    ${FileExistInDrive}      ${FileName}    Check File Exists    1lhq_zUW-vbdE65NSbxkQdkWFdmznVNk5    StatusExcel.xlsx 
+    # ${FileExistInDrive}      ${FileName}    Check File Exists    1lhq_zUW-vbdE65NSbxkQdkWFdmznVNk5    StatusExcel.xlsx
+    FOR    ${File}    IN     @{FolderList}
+        ${FileName}          Get File Name            ${File}
+    END
 
     Digital Sign Using Sikuli    ${StatusFilePath}    1245    AMC    ABCD@1234     ${$GoogleDrivePath}
     # # New Browser            chromium       headless=${False}

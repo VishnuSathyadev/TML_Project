@@ -80,6 +80,17 @@ Popular TML Process
             Text File Log    Error           Popular TML Process    ${Log}
             Fail             ${Log}
         END
+
+        ${UploadClaimsToDriveStatus}         Uploading Files To Google Drive       
+        IF  ${UploadClaimsToDriveStatus}
+            ${Log}           Set Variable    Successfully uploaded the files to Google Drive.
+            Text File Log    Info            Popular TML Process    ${Log}
+            Log              ${Log}
+        ELSE
+            ${Log}           Set Variable    Exception occurred while uploading the files to Google Drive.
+            Text File Log    Error           Popular TML Process    ${Log}
+            Log              ${Log}
+        END
         
         ${UploadToDriveStatus}               Uploading Status Excel To Google Drive
         IF  ${UploadToDriveStatus}

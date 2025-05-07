@@ -216,16 +216,16 @@ TML Invoice Process Loop
                             ELSE
                                 ${HomePageIconExist}       Element Visible Action      ${loc_direct_home_button}
                                 ${SessionTimeoutExist}     Element Visible Action      ${loc_session_timeout}
-                                IF  ${HomePageIconExist}
-                                    Click Element When Clickable Action              ${loc_direct_home_button}
-                                ELSE IF    ${SessionTimeoutExist}
-                                    ${RetryLoopStatus}    Retry Scenario Position    ${Dictionary}
+                                IF  ${SessionTimeoutExist}
+                                    ${RetryLoopStatus}     Retry Scenario Position     ${Dictionary}
                                     IF  ${RetryLoopStatus}
                                         ${Log}           Set Variable    Successfully closed the browser and logged in again.
                                         Text File Log    Info            TML Invoice Process Loop    ${Log}
                                         Log              ${Log}
                                         CONTINUE
                                     END
+                                ELSE IF    ${HomePageIconExist}
+                                    Click Element When Clickable Action              ${loc_direct_home_button}
                                 END
                             END
                         END
@@ -1173,16 +1173,16 @@ Setting Filters And Uploading Invoices
                                                 END
                                             END
 
-                                            ${UploadToDriveStatus}               Uploading Files To Google Drive       ${GoogleDrivePath}    ${DownloadPath}    ${ExcelPath}
-                                            IF  ${UploadToDriveStatus}
-                                                ${Log}           Set Variable    Successfully uploaded the files to Google Drive.
-                                                Text File Log    Info            Setting Filters And Uploading Invoices    ${Log}
-                                                Log              ${Log}
-                                            ELSE
-                                                ${Log}           Set Variable    Exception occurred while uploading the files to Google Drive.
-                                                Text File Log    Error           Setting Filters And Uploading Invoices    ${Log}
-                                                Log              ${Log}
-                                            END
+                                            # ${UploadToDriveStatus}               Uploading Files To Google Drive       ${GoogleDrivePath}    ${DownloadPath}    ${ExcelPath}
+                                            # IF  ${UploadToDriveStatus}
+                                            #     ${Log}           Set Variable    Successfully uploaded the files to Google Drive.
+                                            #     Text File Log    Info            Setting Filters And Uploading Invoices    ${Log}
+                                            #     Log              ${Log}
+                                            # ELSE
+                                            #     ${Log}           Set Variable    Exception occurred while uploading the files to Google Drive.
+                                            #     Text File Log    Error           Setting Filters And Uploading Invoices    ${Log}
+                                            #     Log              ${Log}
+                                            # END
 
                                             ${SuccessCount}                 Evaluate                        ${SuccessCount} + 1
                                             ${CurrentSuccessCount}          Evaluate                        ${CurrentSuccessCount} + 1
@@ -1982,60 +1982,102 @@ Update Final Status In Report
     END
 
 Uploading Files To Google Drive
-    [Arguments]    ${GoogleDrivePath}    ${PdfPath}    ${ExcelFilePath}
+    [Arguments]    
     TRY
         ${Log}                Set Variable    Started uploading files To Google Drive.
         Text File Log         Info            Uploading Files To Google Drive    ${Log}
         Log                   ${Log}
         
-        #Setting the folder list to be created in Google Drive
-        ${FolderList}         Split String    ${GoogleDrivePath}    /    
+        #Setting up variables for creating paths
+        ${CurrentDate}         Get Current Date      result_format=${NormalDateFormat}
+        ${MonthYear}           Get Current Date      result_format=${DateFormat}
+        ${MonthYearSplit}      Split String          ${MonthYear}    -
+        ${CurrentYear}         Set Variable          ${MonthYearSplit}[1]
+        ${CurrentMonth}        Set Variable          ${MonthYearSplit}[0]
+
+        ${DownloadPath}        Set Variable          ${CONFIG}[ClaimsFolderPath]/Downloads/GST_Invoices
+        ${UploadPath}          Set Variable          ${CONFIG}[ClaimsFolderPath]/Uploads/GST_Invoices
+
+        #Fetching all folders in Upload Path
+        ${DirectoryList}      RPA.FileSystem.List Directories In Directory     ${UploadPath}
         
-        #Setting the folder Id to upload PDFs
-        ${FolderIdPdf}    Create Nested Folders    ${FolderList}    ${CLIENT_CONFIG}[RootFolderId]
+        #Looping through each folder in the provided directory
+        FOR    ${Folder}    IN     @{DirectoryList}
 
-        IF  ('${FolderIdPdf}' != 'None')
-            
-            #Setting the list of all PDFs in the specified location
-            ${PdfFiles}    RPA.FileSystem.List Files In Directory    ${PdfPath} 
+            ${FolderName}          Get File Name     ${Folder}
+            ${GoogleDrivePath}     Set Variable      GST_Invoices/${FolderName}/${CurrentYear}/${CurrentMonth}/${CurrentDate}
+            ${PdfPath}             Set Variable      ${CONFIG}[ClaimsFolderPath]/Uploads/GST_Invoices/${FolderName}/${CurrentYear}/${CurrentMonth}/${CurrentDate}
 
-            FOR    ${File}    IN     @{PdfFiles}
-                ${FileName}          Get File Name            ${File}
-                ${UplaodStatus}      Upload File To Folder    ${FolderIdPdf}    ${File}
-                IF  ${UplaodStatus}
-                    ${Log}           Set Variable    Successfully uploaded the PDF file: ${FileName} to Google Drive.
-                    Text File Log    Info            Uploading Files To Google Drive    ${Log}
-                    Log              ${Log}
-                ELSE
-                    ${Log}           Set Variable    Exception occurred while uploading the PDF file: ${FileName} to Google Drive.
-                    Text File Log    Error           Uploading Files To Google Drive    ${Log}
-                    Log              ${Log}
+            #Setting the folder list to be created in Google Drive
+            ${FolderList}         Split String       ${GoogleDrivePath}    /    
+        
+            #Setting the folder Id to upload PDFs
+            ${FolderIdPdf}    Create Nested Folders    ${FolderList}    ${CLIENT_CONFIG}[RootFolderId]
+
+            IF  ('${FolderIdPdf}' != 'None')
+                
+                #Setting the list of all PDFs in the specified location
+                ${PdfFiles}    RPA.FileSystem.List Files In Directory    ${PdfPath} 
+
+                FOR    ${File}    IN     @{PdfFiles}
+                    ${FileName}          Get File Name            ${File}
+                    ${UplaodStatus}      Upload File To Folder    ${FolderIdPdf}    ${File}
+                    IF  ${UplaodStatus}
+                        ${Log}           Set Variable    Successfully uploaded the PDF file: ${FileName} to Google Drive.
+                        Text File Log    Info            Uploading Files To Google Drive    ${Log}
+                        Log              ${Log}
+                    ELSE
+                        ${Log}           Set Variable    Exception occurred while uploading the PDF file: ${FileName} to Google Drive.
+                        Text File Log    Error           Uploading Files To Google Drive    ${Log}
+                        Log              ${Log}
+                    END
                 END
+            ELSE
+                ${Log}                   Set Variable    Couldn't retrieve the folder id to upload the PDFs in Google Drive.
+                Text File Log            Error           Uploading Files To Google Drive    ${Log}
+                Log                      ${Log} 
             END
-        ELSE
-            ${Log}                   Set Variable    Couldn't retrieve the folder id to upload the PDFs in Google Drive.
-            Text File Log            Error           Uploading Files To Google Drive    ${Log}
-            Log                      ${Log} 
         END
 
-        #Setting the folder Id to upload Excel File
-        Remove From List      ${FolderList}                -1
-        ${FolderIdExcel}      Create Nested Folders        ${FolderList}        ${CLIENT_CONFIG}[RootFolderId]
-        IF  ('${FolderIdPdf}' != 'None')
-            ${UplaodStatus}       Upload File To Folder    ${FolderIdExcel}     ${ExcelFilePath}
-            IF  ${UplaodStatus}
-                ${Log}            Set Variable    Successfully uploaded the Excel File to Google Drive.
-                Text File Log     Info            Uploading Files To Google Drive    ${Log}
-                Log               ${Log}
+        #Fetching all folders in Download Path
+        ${DirectoryList}      RPA.FileSystem.List Directories In Directory     ${DownloadPath}
+
+        #Looping through each folder in the provided directory
+        FOR    ${Folder}    IN     @{DirectoryList}
+
+            ${FolderName}          Get File Name     ${Folder}
+            ${GoogleDrivePath}     Set Variable      GST_Invoices/${FolderName}/${CurrentYear}/${CurrentMonth}
+            ${ExcelPath}           Set Variable      ${CONFIG}[ClaimsFolderPath]/Downloads/GST_Invoices/${FolderName}/${CurrentYear}/${CurrentMonth}
+
+            #Setting the folder list to be created in Google Drive
+            ${FolderList}         Split String       ${GoogleDrivePath}    /
+
+            #Setting the folder Id to upload Excel Files
+            ${FolderIdExcel}      Create Nested Folders    ${FolderList}    ${CLIENT_CONFIG}[RootFolderId]
+
+            IF  ('${FolderIdExcel}' != 'None')
+
+                #Setting the list of all PDFs in the specified location
+                ${PdfFiles}    RPA.FileSystem.List Files In Directory    ${ExcelPath}
+                
+                FOR    ${File}    IN      @{PdfFiles}
+                    ${FileName}           Get File Name            ${File}
+                    ${UplaodStatus}       Upload File To Folder    ${FolderIdExcel}     ${File}
+                    IF  ${UplaodStatus}
+                        ${Log}            Set Variable    Successfully uploaded the Excel File to Google Drive.
+                        Text File Log     Info            Uploading Files To Google Drive    ${Log}
+                        Log               ${Log}
+                    ELSE
+                        ${Log}            Set Variable    Exception occurred while uploading the Excel File to Google Drive.
+                        Text File Log     Error           Uploading Files To Google Drive    ${Log}
+                        Log               ${Log}
+                    END
+                END
             ELSE
-                ${Log}            Set Variable    Exception occurred while uploading the Excel File to Google Drive.
-                Text File Log     Error           Uploading Files To Google Drive    ${Log}
-                Log               ${Log}
+                ${Log}                    Set Variable    Couldn't retrieve the folder id to upload the Excel in Google Drive.
+                Text File Log             Error           Uploading Files To Google Drive    ${Log}
+                Log                       ${Log} 
             END
-        ELSE
-            ${Log}                Set Variable    Couldn't retrieve the folder id to upload the Excel in Google Drive.
-            Text File Log         Error           Uploading Files To Google Drive    ${Log}
-            Log                   ${Log} 
         END
 
         ${Log}                Set Variable     Completed uploading files To Google Drive.
