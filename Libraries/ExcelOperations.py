@@ -292,10 +292,11 @@ def append_data_to_excel_by_data_type(file_path, sheet_name, data_dict):
 
             # Try to convert string to datetime
             if isinstance(value, str):
+                cleaned_value = value.strip().replace("–", "-").replace("—", "-")
                 try:
-                    parsed_date = datetime.strptime(value, "%d-%m-%Y")
-                    cell.value = parsed_date
-                    cell.number_format = 'DD/MM/YYYY'
+                    parsed_date = datetime.strptime(cleaned_value, "%d-%m-%Y")
+                    cell.value = parsed_date.strftime("%d/%m/%Y")
+                    cell.number_format = 'dd/mm/yyyy'
                     continue
                 except ValueError:
                     pass  # Not a date
