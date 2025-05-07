@@ -1,0 +1,35 @@
+{"level":30,"time":"2025-05-07T03:37:22.656Z","pid":6600,"hostname":"PM-COR-RPASERVER","msg":"Listening on 62868"}
+(node:6600) DeprecationWarning: Calling start() is no longer necessary. It can be safely omitted.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\index.js:12223:15)
+    at PlaywrightServer.getActiveBrowser (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\index.js:13119:59)
+    at PlaywrightServer.setTimeout (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\index.js:13367:57)
+    at Object.onReceiveHalfClose (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\node_modules\@grpc\grpc-js\build\src\server.js:1461:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\node_modules\@grpc\grpc-js\build\src\server-interceptors.js:575:31)
+    at BaseServerInterceptingCall.handleEndEvent (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\node_modules\@grpc\grpc-js\build\src\server-interceptors.js:615:14)
+    at ServerHttp2Stream.<anonymous> (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\node_modules\@grpc\grpc-js\build\src\server-interceptors.js:382:18)
+    at ServerHttp2Stream.emit (node:events:536:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2025-05-07T03:37:23.082Z","pid":6600,"hostname":"PM-COR-RPASERVER","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2025-05-07T03:37:23.082Z","pid":6600,"hostname":"PM-COR-RPASERVER","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\index.js:12223:15)
+    at PlaywrightServer.getActiveBrowser (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\index.js:13119:59)
+    at PlaywrightServer.setTimeout (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\index.js:13367:57)
+    at Object.onReceiveHalfClose (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\node_modules\@grpc\grpc-js\build\src\server.js:1461:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\node_modules\@grpc\grpc-js\build\src\server-interceptors.js:575:31)
+    at BaseServerInterceptingCall.handleEndEvent (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\node_modules\@grpc\grpc-js\build\src\server-interceptors.js:615:14)
+    at ServerHttp2Stream.<anonymous> (c:\ProgramData\robocorp\ht\9ca4fde_b1f3c24_d4ec2478\Lib\site-packages\Browser\wrapper\node_modules\@grpc\grpc-js\build\src\server-interceptors.js:382:18)
+    at ServerHttp2Stream.emit (node:events:536:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2025-05-07T03:37:23.096Z","pid":6600,"hostname":"PM-COR-RPASERVER","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2025-05-07T03:37:23.096Z","pid":6600,"hostname":"PM-COR-RPASERVER","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2025-05-07T03:37:25.212Z","pid":6600,"hostname":"PM-COR-RPASERVER","msg":"Start of node method closeAllBrowsers"}
+{"level":30,"time":"2025-05-07T03:37:25.212Z","pid":6600,"hostname":"PM-COR-RPASERVER","msg":"End of node method closeAllBrowsers"}

@@ -90,3 +90,5 @@ loc_loader_invisible_check  = '//div[@class="loader" and contains(@style, "displ
 loc_first_page_button       = '(//a[contains(text(),"First") and @class="icon item"])[1]'   
 loc_first_page_disabled     = '(//a[contains(text(),"First") and @class="icon item disabled"])[1]' 
 loc_dropdown_hudread        = '//div[@class="text" and text()="100"]'
+loc_session_timeout         = '//h2[text()="Session Timeout"]'
+loc_relogin_button          = '//button[contains(text(),"Relogin")]'

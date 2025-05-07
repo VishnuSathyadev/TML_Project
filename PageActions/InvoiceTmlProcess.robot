@@ -215,10 +215,11 @@ TML Invoice Process Loop
                                 Text File Log    Info            TML Invoice Process Loop    ${Log}
                                 Log              ${Log}
                             ELSE
-                                ${HomePageIconExist}     Element Visible Action      ${loc_direct_home_button}
+                                ${HomePageIconExist}       Element Visible Action      ${loc_direct_home_button}
+                                ${SessionTimeoutExist}     Element Visible Action      ${loc_session_timeout}
                                 IF  ${HomePageIconExist}
                                     Click Element When Clickable Action              ${loc_direct_home_button}
-                                ELSE
+                                ELSE IF    ${SessionTimeoutExist}
                                     ${RetryLoopStatus}    Retry Scenario Position    ${Dictionary}
                                     IF  ${RetryLoopStatus}
                                         ${Log}           Set Variable    Successfully closed the browser and logged in again.
