@@ -81,6 +81,7 @@ Popular TML Process
             Fail             ${Log}
         END
 
+        #Uploading all PDFs and Excel Data To Google Drive
         ${UploadClaimsToDriveStatus}         Uploading Files To Google Drive       
         IF  ${UploadClaimsToDriveStatus}
             ${Log}           Set Variable    Successfully uploaded the files to Google Drive.
@@ -92,6 +93,7 @@ Popular TML Process
             Log              ${Log}
         END
         
+        #Uploading Tracker Excel  To Google Drive
         ${UploadToDriveStatus}               Uploading Status Excel To Google Drive
         IF  ${UploadToDriveStatus}
             ${Log}           Set Variable    Successfully uploaded the tracker excel to Google Drive.
