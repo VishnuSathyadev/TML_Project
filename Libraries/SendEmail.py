@@ -3,6 +3,10 @@ import smtplib
 from email.message import EmailMessage
 from ExcelOperations import delete_excel_sheet
 import ssl
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../Variables')))
+from Variables import GlobalVariables
 
 def SendEmail(Subject, EmailBody, RecipientTo, RecipientCc, Attachment, SheetName, SenderEmail, EmailPassword):  
   try:
@@ -56,7 +60,8 @@ def SendEmail(Subject, EmailBody, RecipientTo, RecipientCc, Attachment, SheetNam
     Message.add_alternative(StyledHtml, subtype='html')
 
     #Deleting Report Sheet
-    # delete_excel_sheet(Attachment, SheetName)
+    delete_excel_sheet(Attachment, SheetName)
+    delete_excel_sheet(Attachment, GlobalVariables.BriefTrackerSheet)
 
     # Attach the Excel file
     with open(Attachment, "rb") as File:
