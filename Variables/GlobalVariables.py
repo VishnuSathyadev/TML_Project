@@ -21,7 +21,7 @@ NormalDateFormat        = r"%d-%m-%Y"
 TmlRefNo_Regex          = r"(?<=TML Ref. No. )\d+"
 InvoiceCount_Regex      = r"(\d+)"
 SearchColumnNamne       = "Reference No"
-TrackerSheetName        = "BOTStatus_TrackerDetailed"
-BriefTrackerSheet       = 'BOTStatus_Tracker1'
-ReportSheetName         = "EndReport_Tracker"
+TrackerSheetName        = "ClaimRunSummary"
+BriefTrackerSheet       = 'BotRunTracker'
+ReportSheetName         = "EmailSummary"
 PageLimit               = 100

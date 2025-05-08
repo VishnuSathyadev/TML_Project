@@ -18,7 +18,8 @@ Directories To CleanUp Files
         
         ${OutputPath}        RPA.FileSystem.Join Path    ${EXECDIR}                     Output
         ${InputPath}         RPA.FileSystem.Join Path    ${EXECDIR}                     Input
-        ${SikuliPath}        RPA.FileSystem.Join Path    ${EXECDIR}                     sikuli_captured
+        ${SikuliPath}        RPA.FileSystem.Join Path    ${EXECDIR}                     Output\\sikuli_captured
+        ${ScreenShot}        RPA.FileSystem.Join Path    ${EXECDIR}                     Output\\browser\\screenshot
         ${DownloadPath}      RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    Downloads
         ${UploadPath}        RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    Uploads
 
@@ -33,7 +34,7 @@ Directories To CleanUp Files
             Fail             ${Log} 
         END
 
-        ${FirstList}         Create List     ${OutputPath}    ${InputPath}    ${SikuliPath}
+        ${FirstList}         Create List     ${OutputPath}    ${InputPath}    ${SikuliPath}    ${ScreenShot}
 
         FOR    ${Directory}    IN    @{FirstList}
             ${DeleteStatus}    Remove Older Files    ${Directory}
@@ -69,7 +70,7 @@ Directories To CleanUp Files
         RETURN               True
     EXCEPT    AS    ${Exception}
         Log                  ${Exception}
-        Text File Log        Error      Directories To CleanUp Files    ${Exception}
+        Text File Log        Error           Directories To CleanUp Files    ${Exception}
         RETURN               False
     END
 
