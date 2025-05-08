@@ -287,9 +287,10 @@ TML Invoice Process Loop
                     
                     #Setting the consolidated excel path
                     ${ConsolidatedExcelPath}    RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    ConsolidatedExcel.xlsx
+                    Set Global Variable         ${ConsolidatedExcel}        ${ConsolidatedExcelPath}
 
                     #Appending data to consolidated data sheet
-                    ${AppendStatus}    Append Consolidated Excel    ${DataExcelPath}    target_file
+                    ${AppendStatus}    Append Consolidated Excel    ${DataExcelPath}    ${ConsolidatedExcelPath}
 
                     IF  ${AppendStatus}  
                         ${Log}           Set Variable    Successfully appened data to the consolidated excel file.
@@ -2118,10 +2119,22 @@ Uploading Status Excel To Google Drive
         ${UplaodStatus}       Upload File To Folder        ${CLIENT_CONFIG}[StatusFolderId]     ${StatusFilePath}
         IF  ${UplaodStatus}
             ${Log}            Set Variable    Successfully uploaded the Tracker Excel File to Google Drive.
-            Text File Log     Info            Uploading Files To Google Drive    ${Log}
+            Text File Log     Info            Uploading Status Excel To Google Drive    ${Log}
             Log               ${Log}
         ELSE
             ${Log}            Set Variable    Exception occurred while uploading the Tracker Excel File to Google Drive.
+            Text File Log     Error           Uploading Status Excel To Google Drive    ${Log}
+            Log               ${Log}
+        END
+
+        #Uploading Consolidated Excel To Google rive        
+        ${UplaodStatus}       Upload File To Folder        ${CLIENT_CONFIG}[RootFolderId]     ${ConsolidatedExcel}
+        IF  ${UplaodStatus}
+            ${Log}            Set Variable    Successfully uploaded the Consolidated Excel File to Google Drive.
+            Text File Log     Info            Uploading Files To Google Drive    ${Log}
+            Log               ${Log}
+        ELSE
+            ${Log}            Set Variable    Exception occurred while uploading the Consolidated Excel File to Google Drive.
             Text File Log     Error           Uploading Files To Google Drive    ${Log}
             Log               ${Log}
         END
