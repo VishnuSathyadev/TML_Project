@@ -37,16 +37,19 @@ ${Subject}              Test
 ${EmailBody}            Hi all
 ${RecipientTo}          vishnu.s@quadance.com
 ${RecipientCc}          ${None}
+${DataExcelPath}        D:\\TML_Claims\\Downloads\\GST_Invoices\\Chengalpet\\2025\\May
 ${Attachment}           D:/TML_Process_GIT/TML_Project/Input/StatusTrackerExcel_06_05_2025_09_05_37.xlsx
 ${path}                 D:\\TML_Process_GIT\\TML_Project\\Output\\ExecutionLog_07_05_2025.txt
 ${LOG_DIR}              D:\\TML_Process_GIT\\TML_Project\\popular_tml_process.bat
 
 *** Tasks ***
 TestTask
-    Run Batch File    ${LOG_DIR}
+    # Run Batch File    ${LOG_DIR}
     ${FileExistInDrive}      ${FileName}    Check File Exists    1lhq_zUW-vbdE65NSbxkQdkWFdmznVNk5    StatusExcel.xlsx
-    Read Config File
-    Read Client Config File
+    # Read Config File
+    # Read Client Config File
+    #Check whether data file exist
+  
     # ${Status}    Uploading Files To Google Drive
 
 

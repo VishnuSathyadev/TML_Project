@@ -288,18 +288,26 @@ TML Invoice Process Loop
                     #Setting the consolidated excel path
                     ${ConsolidatedExcelPath}    RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    ConsolidatedExcel.xlsx
                     Set Global Variable         ${ConsolidatedExcel}        ${ConsolidatedExcelPath}
+                    
+                    #Check whether data file exist
+                    ${DataFiles}        RPA.FileSystem.List Files In Directory    ${DataExcelPath}
+                    ${DataFileCount}    Get Length    ${DataFiles}
+                    IF  ${DataFileCount} > 0
+                        ${FileName}         Get File Name               ${DataFiles}[0]
+                        ${DataExcelPath}    RPA.FileSystem.Join Path    ${DataExcelPath}    ${FileName}
+                    
+                        #Appending data to consolidated data sheet
+                        ${AppendStatus}    Append Consolidated Excel    ${DataExcelPath}    ${ConsolidatedExcelPath}
 
-                    #Appending data to consolidated data sheet
-                    ${AppendStatus}    Append Consolidated Excel    ${DataExcelPath}    ${ConsolidatedExcelPath}
-
-                    IF  ${AppendStatus}  
-                        ${Log}           Set Variable    Successfully appened data to the consolidated excel file.
-                        Text File Log    Info            TML Invoice Process Loop    ${Log}
-                        Log              ${Log}
-                    ELSE
-                        ${Log}           Set Variable    Exception occurred during appeneding data to the consolidated excel file.
-                        Text File Log    Error           TML Invoice Process Loop    ${Log}
-                        Log              ${Log}
+                        IF  ${AppendStatus}  
+                            ${Log}           Set Variable    Successfully appened data to the consolidated excel file.
+                            Text File Log    Info            TML Invoice Process Loop    ${Log}
+                            Log              ${Log}
+                        ELSE
+                            ${Log}           Set Variable    Exception occurred during appeneding data to the consolidated excel file.
+                            Text File Log    Error           TML Invoice Process Loop    ${Log}
+                            Log              ${Log}
+                        END
                     END
 
                     #Closing IFrame Page
@@ -877,6 +885,15 @@ Setting Filters And Uploading Invoices
                                 ${LoaderInvisibleCheck}      Wait Until Element Available                 ${loc_loader_display}      
                                 ${LoaderInvisibleCheck}      Wait Until Element Dissapears                ${loc_loader_display}    
                                 ${ActionButtonExist}         Wait Until Element Available With Timeout    ${loc_row_one_action_button}       ${DEFAULT_WAIT} 
+
+                                #Setting required variable values
+                                ${BranchLocation}          Set Variable                         ${Dictionary}[Branch Name]
+                                ${CurrentMonthYear}        Get Current Date                     result_format=${DateFormat}
+                                ${MonthYearSplit}          Split String                         ${CurrentMonthYear}    -
+                                ${CurrentYear}             Set Variable                         ${MonthYearSplit}[1]
+                                ${CurrentMonth}            Set Variable                         ${MonthYearSplit}[0]
+                                ${CurrentDate}             Get Current Date                     result_format=${NormalDateFormat}
+                                ${ExtractExcelName}        Set Variable                         ${BranchLocation}_${CurrentMonth}_${CurrentYear}.xlsx
                                 
                                 IF  ${ActionButtonExist}
                                     ${Log}                   Set Variable    Data available for this branch on ${Month} for Invoice Type: ${InvoiceType}.
@@ -894,6 +911,9 @@ Setting Filters And Uploading Invoices
                                     Text File Log            Info            Setting Filters And Uploading Invoices    ${Log}
                                     ${ActionButtonExist}     Evaluate        False
                                     Log                      ${Log} 
+                                    
+                                    #Setting Excel File Path
+                                    ${ExcelFilePath}           Set Variable            ${CONFIG}[ClaimsFolderPath]/Downloads/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}
 
                                     #Setting values to match dictionary
                                     Set To Dictionary          ${MatchDictionary}      Login                  ${Dictionary}[Login ID]    
@@ -927,13 +947,13 @@ Setting Filters And Uploading Invoices
                                 #Setting Sheet Name
                                 ${SheetName}    Set Variable    Invoice Register
                                 
-                                ${BranchLocation}          Set Variable                         ${Dictionary}[Branch Name]
-                                ${CurrentMonthYear}        Get Current Date                     result_format=${DateFormat}
-                                ${MonthYearSplit}          Split String                         ${CurrentMonthYear}    -
-                                ${CurrentYear}             Set Variable                         ${MonthYearSplit}[1]
-                                ${CurrentMonth}            Set Variable                         ${MonthYearSplit}[0]
-                                ${CurrentDate}             Get Current Date                     result_format=${NormalDateFormat}
-                                ${ExtractExcelName}        Set Variable                         ${BranchLocation}_${CurrentMonth}_${CurrentYear}.xlsx
+                                # ${BranchLocation}          Set Variable                         ${Dictionary}[Branch Name]
+                                # ${CurrentMonthYear}        Get Current Date                     result_format=${DateFormat}
+                                # ${MonthYearSplit}          Split String                         ${CurrentMonthYear}    -
+                                # ${CurrentYear}             Set Variable                         ${MonthYearSplit}[1]
+                                # ${CurrentMonth}            Set Variable                         ${MonthYearSplit}[0]
+                                # ${CurrentDate}             Get Current Date                     result_format=${NormalDateFormat}
+                                # ${ExtractExcelName}        Set Variable                         ${BranchLocation}_${CurrentMonth}_${CurrentYear}.xlsx
 
                                 #Setting Download Paths
                                 ${DownloadPath}            Set Variable                         ${CONFIG}[ClaimsFolderPath]/Downloads/GST_Invoices/${BranchLocation}/${CurrentYear}/${CurrentMonth}/${CurrentDate}
@@ -1346,7 +1366,7 @@ Setting Filters And Uploading Invoices
     EXCEPT    AS    ${Exception}
         Log         ${Exception}
         Text File Log    Error           Setting Filters And Uploading Invoices    ${Exception}
-        RETURN           False           ${TotalInvoice}    ${SuccessCount}        ${FailureCount}    None
+        RETURN           False           ${TotalInvoice}    ${SuccessCount}        ${FailureCount}    ${ExcelFilePath}
     END
 
 Navigation To SAP Warranty
