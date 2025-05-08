@@ -266,7 +266,7 @@ TML Invoice Process Loop
                     # Unselect Frame
 
                     #Invoking Setting Filters and Generate Invoices Keyword
-                    ${UploadStatus}     ${TotalInvoice}    ${SuccessCount}     ${FailureCount}    Setting Filters And Uploading Invoices    ${Dictionary}  
+                    ${UploadStatus}     ${TotalInvoice}    ${SuccessCount}     ${FailureCount}    ${DataExcelPath}    Setting Filters And Uploading Invoices    ${Dictionary}  
                     IF  ${UploadStatus}  
                         ${Log}           Set Variable    Successfully completed invoice uploading process.
                         Text File Log    Info            TML Invoice Process Loop    ${Log}
@@ -284,6 +284,22 @@ TML Invoice Process Loop
                     #Appending Data To Excel  
                     Update Excel Cell         ${StatusFilePath}       Position             ${Dictionary}[Branch Name]      ${StatusDictionary}    ${ReportSheetName}   
                     Remove From Dictionary    ${StatusDictionary}     Upload Loop	       Upload Total	                   Upload Success	      Upload Exception
+                    
+                    #Setting the consolidated excel path
+                    ${ConsolidatedExcelPath}    RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    ConsolidatedExcel.xlsx
+
+                    #Appending data to consolidated data sheet
+                    ${AppendStatus}    Append Consolidated Excel    ${DataExcelPath}    target_file
+
+                    IF  ${AppendStatus}  
+                        ${Log}           Set Variable    Successfully appened data to the consolidated excel file.
+                        Text File Log    Info            TML Invoice Process Loop    ${Log}
+                        Log              ${Log}
+                    ELSE
+                        ${Log}           Set Variable    Exception occurred during appeneding data to the consolidated excel file.
+                        Text File Log    Error           TML Invoice Process Loop    ${Log}
+                        Log              ${Log}
+                    END
 
                     #Closing IFrame Page
                     RPA.Browser.Playwright.Close Page
@@ -1325,11 +1341,11 @@ Setting Filters And Uploading Invoices
         ${Log}           Set Variable    Completed processing Setting Filters and Uploading Invoices process.
         Text File Log    Info            Setting Filters And Uploading Invoices    ${Log}
         Log              ${Log}
-        RETURN           True            ${TotalInvoice}    ${SuccessCount}        ${FailureCount}
+        RETURN           True            ${TotalInvoice}    ${SuccessCount}        ${FailureCount}    ${ExcelFilePath}
     EXCEPT    AS    ${Exception}
         Log         ${Exception}
         Text File Log    Error           Setting Filters And Uploading Invoices    ${Exception}
-        RETURN           False           ${TotalInvoice}    ${SuccessCount}        ${FailureCount}
+        RETURN           False           ${TotalInvoice}    ${SuccessCount}        ${FailureCount}    None
     END
 
 Navigation To SAP Warranty

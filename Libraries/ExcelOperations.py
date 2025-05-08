@@ -366,3 +366,24 @@ def filter_table(table, column_name, allowed_values):
     except Exception as e:
         print(f"Error while filtering table: {e}")
         return [] 
+
+def append_consolidated_excel(source_file, target_file, sheet_name="ConsolidateddSheet"):
+    try:
+        # Read source Excel (with headers)
+        df = pd.read_excel(source_file)
+
+        # If target file exists, append to it
+        if os.path.exists(target_file):
+            existing_df = pd.read_excel(target_file)
+            combined_df = pd.concat([existing_df, df], ignore_index=True)
+        else:
+            combined_df = df
+
+        # Write combined data to target file
+        combined_df.to_excel(target_file, index=False, sheet_name=sheet_name)
+        print(f"Data written to: {target_file}")
+        return True
+
+    except Exception as e:
+        print(f"Error while copying/appending Excel data: {e}")
+        return False
