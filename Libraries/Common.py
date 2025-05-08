@@ -99,3 +99,16 @@ def check_pdf_file_exists(folder_path):
             return False
     except Exception as e:
         return False
+
+def delete_directory(path):
+    try:
+        if os.path.exists(path) and os.path.isdir(path):
+            shutil.rmtree(path)
+            print(f"Deleted directory: {path}")
+            return True
+        else:
+            print(f"Directory not found or not a directory: {path}")
+            return False
+    except Exception as e:
+        print(f"Error deleting directory: {e}")
+        return False

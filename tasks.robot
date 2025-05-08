@@ -104,7 +104,19 @@ Popular TML Process
             Text File Log    Error           Popular TML Process    ${Log}
             Log              ${Log}
         END
-
+        
+        #Cleaning up unwanted files from local machine
+        ${CleanUpStatus}    Directories To CleanUp Files
+        IF  ${CleanUpStatus}
+            ${Log}           Set Variable    Successfully removed all unwanted files from RDP.
+            Text File Log    Info            Popular TML Process    ${Log}
+            Log              ${Log}
+        ELSE
+            ${Log}           Set Variable    Exception occurred while removing files from RDP.
+            Text File Log    Error           Popular TML Process    ${Log}
+            Log              ${Log}
+        END
+        
         #Deleting Status Tracker File
         RPA.FileSystem.Remove File           ${StatusFilePath}
 

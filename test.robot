@@ -14,6 +14,7 @@ Library             Libraries/ExcelOperations.py
 Library             RPA.Browser.Selenium
 Library             XML
 Library    RPA.Email.ImapSmtp
+Resource    PageActions/FileRemoving.robot
 
 *** Variables ***
 ${TEXT}    000208299630032025
@@ -37,13 +38,34 @@ ${EmailBody}            Hi all
 ${RecipientTo}          vishnu.s@quadance.com
 ${RecipientCc}          ${None}
 ${Attachment}           D:/TML_Process_GIT/TML_Project/Input/StatusTrackerExcel_06_05_2025_09_05_37.xlsx
+${path}                 D:\\TML_Process_GIT\\TML_Project\\Output\\ExecutionLog_07_05_2025.txt
+
+${LOG_DIR}              D:\\TML_Process_GIT\\TML_Project\\Output
 
 *** Tasks ***
 TestTask
     # Open File    ${StatusFilePath}
     # RPA.Windows.Control Window    name:"AV2DocumentTabView"
-    # ${FolderIdPdf}    Create Nested Folders    ${FolderList}    1nBXAMP28x_bG5B_yFbg2vK_9D2ckjaKT
+    # ${FolderIdPdf}    Create Nested Folders    ${FolderList} 
+    Read Config File
+    Directories To CleanUp Files
+    ${timestamp}=    Get Modified Time    ${path}
+    ${date}=    Convert Date    ${timestamp}    result_format=${NormalDateFormat}
 
+    # Read Config File
+    # ${Status}    Uploading Files To Google Drive
+
+
+    ${files}=    List Files In Directory    ${LOG_DIR}
+    FOR    ${file}    IN    @{files}
+        ${path}    Convert To String   ${file}    
+        ${mod_time}=    Get Modified Time    ${path}
+        ${now}=    Get Current Date    result_format=epoch
+        ${file_time}=    Convert Date    ${mod_time}    result_format=epoch
+        ${age_in_days}=    Evaluate    (${now} - ${file_time}) / 86400
+        Run Keyword If    ${age_in_days} > 7    Remove File    ${file}
+        Log    Checked ${file}: ${age_in_days} days old
+    END
 
     ${FolderList}    RPA.FileSystem.List Directories In Directory     D:\\TML_Claims\\Uploads\\GST_Invoices
 

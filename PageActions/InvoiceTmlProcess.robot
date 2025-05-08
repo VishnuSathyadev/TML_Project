@@ -13,6 +13,7 @@ Resource        Status.robot
 Resource        InitialActions.robot
 Resource        ExceptionHandling.robot
 Resource        DigitalSign_Sikuli.robot
+Resource        FileRemoving.robot
 Library         ../Libraries/ExcelOperations.py
 Library         ../Libraries/GoogleDrive.py
 Library         ../Libraries/Common.py
