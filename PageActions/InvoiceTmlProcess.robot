@@ -107,253 +107,260 @@ TML Invoice Process Loop
             ${IterationCounter}    Evaluate         0
             
             FOR    ${Dictionary}    IN    @{ListOfDictionary} 
-                ${IterationCounter}           Evaluate    ${IterationCounter} + 1
-                ${RetryCount}                 Evaluate    0
-                ${InvalidCredentialStatus}    Evaluate    False
-                
-                ${Log}           Set Variable    Started processing Login ID: ${Dictionary}[Login ID]
-                Text File Log    Info            TML Invoice Process Loop     ${Log}
-                Log              ${Log}
-                 
-                WHILE    ${RetryCount} < ${MaxRetries}
-                    TRY
-                        IF  ${IterationCounter} == 1
-                            #Invoking Login Process
-                            ${LoginStatus}    ${InvalidCredentialStatus}    Login Portal    ${Dictionary}
-                            IF  ${LoginStatus}
-                                ${Log}           Set Variable    Successfully logged into SAP system.
-                                Text File Log    Info            TML Invoice Process Loop    ${Log}
-                                Log              ${Log}
-                                BREAK  
-                            ELSE IF    ${InvalidCredentialStatus}
-                                ${Log}           Set Variable    Login failed due to invalid credentials.
-                                Text File Log    Error           TML Invoice Process Loop    ${Log}
-                                Fail             ${Log}
-                            ELSE
-                                ${Log}           Set Variable    Attempt to log into SAP system was a failure.
-                                Text File Log    Error           TML Invoice Process Loop    ${Log}
-                                Fail             ${Log}   
-                            END
-                        END
-                        BREAK
-                    EXCEPT
-                        ${Log}           Set Variable    Login failed for Login ID: ${Dictionary}[Login ID]
-                        Text File Log    Error           TML Invoice Process Loop    ${Log}
-                        Log              ${Log}
-                        
-                        ${RetryCount}        Evaluate        ${RetryCount} + 1 
-                        IF  ${RetryCount} >= ${MaxRetries}
-                            ${Log}                Set Variable             Max retries reached for Login ID: ${Dictionary}[Login ID]. Moving to the next Login ID.
-                            Text File Log         Info                     TML Invoice Process Loop    ${Log}
-                            Log                   ${Log}
-                            Set To Dictionary     ${StatusDictionary}      Login ID               ${Dictionary}[Login ID]   
-                            Set To Dictionary     ${StatusDictionary}      Status                 Not Completed  
-                            Set To Dictionary     ${StatusDictionary}      Position               N/A
-                            Set To Dictionary     ${StatusDictionary}      IRN Total              0
-                            Set To Dictionary     ${StatusDictionary}      IRN Success            0
-                            Set To Dictionary     ${StatusDictionary}      IRN Exception          0
-                            Set To Dictionary     ${StatusDictionary}      Upload Total           0
-                            Set To Dictionary     ${StatusDictionary}      Upload Success         0 
-                            Set To Dictionary     ${StatusDictionary}      Upload Exception       0  
-    
-                            Append Multiple Cells In Excel Row      ${StatusDictionary}       ${StatusFilePath}       ${ReportSheetName} 
-                            Remove From Dictionary                  ${StatusDictionary}       Login ID                Position      IRN Total	   IRN Success	  IRN Exception	    Upload Total	 Upload Success	  Upload Exception    Status    
-                        ELSE IF    ${InvalidCredentialStatus}
-                            ${RetryCount}         Evaluate                 ${MaxRetries} + 0
-                            Set To Dictionary     ${StatusDictionary}      Login ID               ${Dictionary}[Login ID]   
-                            Set To Dictionary     ${StatusDictionary}      Status                 Invalid Credentials 
-                            Set To Dictionary     ${StatusDictionary}      Position               N/A
-                            Set To Dictionary     ${StatusDictionary}      IRN Total              0
-                            Set To Dictionary     ${StatusDictionary}      IRN Success            0
-                            Set To Dictionary     ${StatusDictionary}      IRN Exception          0
-                            Set To Dictionary     ${StatusDictionary}      Upload Total           0
-                            Set To Dictionary     ${StatusDictionary}      Upload Success         0 
-                            Set To Dictionary     ${StatusDictionary}      Upload Exception       0   
-    
-                            Append Multiple Cells In Excel Row      ${StatusDictionary}       ${StatusFilePath}       ${ReportSheetName} 
-                            Remove From Dictionary                  ${StatusDictionary}       Login ID                Position      IRN Total	   IRN Success	  IRN Exception	    Upload Total	 Upload Success	  Upload Exception    Status    
-                            BREAK
-                        ELSE
-                            RPA.Browser.Playwright.Close Browser
-                            Open Website
-                        END
-                    END
-                END
-
-                IF  ${RetryCount} < ${MaxRetries}
-
-                    ${RetryCount}          Evaluate    0
+                TRY
+                    ${IterationCounter}           Evaluate    ${IterationCounter} + 1
+                    ${RetryCount}                 Evaluate    0
+                    ${InvalidCredentialStatus}    Evaluate    False
+                    
+                    ${Log}           Set Variable    Started processing Login ID: ${Dictionary}[Login ID]
+                    Text File Log    Info            TML Invoice Process Loop     ${Log}
+                    Log              ${Log}
+                    
                     WHILE    ${RetryCount} < ${MaxRetries}
                         TRY
-                            IF  ${IterationCounter} != 1
-                                ${HomePageIconExist}    Element Visible Action    ${loc_direct_home_button}
-                                IF  ${HomePageIconExist}
-                                    Click Element When Clickable Action           ${loc_direct_home_button}
+                            IF  ${IterationCounter} == 1
+                                #Invoking Login Process
+                                ${LoginStatus}    ${InvalidCredentialStatus}    Login Portal    ${Dictionary}
+                                IF  ${LoginStatus}
+                                    ${Log}           Set Variable    Successfully logged into SAP system.
+                                    Text File Log    Info            TML Invoice Process Loop    ${Log}
+                                    Log              ${Log}
+                                    BREAK  
+                                ELSE IF    ${InvalidCredentialStatus}
+                                    ${Log}           Set Variable    Login failed due to invalid credentials.
+                                    Text File Log    Error           TML Invoice Process Loop    ${Log}
+                                    Fail             ${Log}
+                                ELSE
+                                    ${Log}           Set Variable    Attempt to log into SAP system was a failure.
+                                    Text File Log    Error           TML Invoice Process Loop    ${Log}
+                                    Fail             ${Log}   
                                 END
                             END
-                            
-                            #Invoking Navigation To SAP Screen Keyword
-                            ${NavigationStatus}     Navigation To SAP Warranty    ${Dictionary}
-                            IF  ${NavigationStatus}
-                                ${Log}           Set Variable    Successfully navigated to SAP Warranty screen.
-                                Text File Log    Info            TML Invoice Process Loop    ${Log}
-                                Log              ${Log}
-                                BREAK
-                            ELSE
-                                ${Log}           Set Variable    Navigation to SAP Warranty screen failed.
-                                Text File Log    Error           TML Invoice Process Loop    ${Log}
-                                Fail             ${Log}
-                            END
+                            BREAK
                         EXCEPT
-                            ${Log}           Set Variable    Navigation to SAP Warranty screen failed for Login ID: ${Dictionary}[Login ID]
-                            Text File Log    Error           Navigation To SAP Warranty    ${Log}
-                            Log              ${Log}
-                            
-                            ${RetryCount}    Evaluate        ${RetryCount} + 1
-                            IF  ${RetryCount} >= ${MaxRetries}
-                                ${Log}           Set Variable    Max retries reached for Login ID: ${Dictionary}[Login ID]. Moving to the next Login ID.
-                                Text File Log    Info            TML Invoice Process Loop    ${Log}
-                                Log              ${Log}
-                            ELSE
-                                ${HomePageIconExist}       Element Visible Action      ${loc_direct_home_button}
-                                ${SessionTimeoutExist}     Element Visible Action      ${loc_session_timeout}
-                                IF  ${SessionTimeoutExist}
-                                    ${RetryLoopStatus}     Retry Scenario Position     ${Dictionary}
-                                    IF  ${RetryLoopStatus}
-                                        ${Log}           Set Variable    Successfully closed the browser and logged in again.
-                                        Text File Log    Info            TML Invoice Process Loop    ${Log}
-                                        Log              ${Log}
-                                        CONTINUE
-                                    END
-                                ELSE IF    ${HomePageIconExist}
-                                    Click Element When Clickable Action              ${loc_direct_home_button}
-                                END
-                            END
-                        END
-                    END
-                    
-                    #Setting Dictionary For End Report
-                    Set To Dictionary       ${StatusDictionary}      Login ID       ${Dictionary}[Login ID]    
-                    Set To Dictionary       ${StatusDictionary}      Position       ${Dictionary}[Branch Name]
-
-                    #Appending Data To Excel  
-                    Append Multiple Cells In Excel Row      ${StatusDictionary}     ${StatusFilePath}      ${ReportSheetName} 
-                    Remove From Dictionary                  ${StatusDictionary}     Login ID               Position 
-
-                    ${GenerationIRNStatus}    ${TotalInvoice}    ${SuccessCount}     ${FailureCount}    Setting Filters And Generate Invoices   ${Dictionary}
-                    IF  ${GenerationIRNStatus}  
-                        ${Log}           Set Variable    Successfully completed IRN generation process.
-                        Text File Log    Info            TML Invoice Process Loop    ${Log}
-                        Log              ${Log}
-                    ELSE
-                        ${Log}           Set Variable    Exception occurred during IRN generation process.
-                        Text File Log    Error           TML Invoice Process Loop    ${Log}
-                        Log              ${Log}
-                    END  
-                    
-                    Set To Dictionary         ${StatusDictionary}     IRN Total         ${TotalInvoice}
-                    Set To Dictionary         ${StatusDictionary}     IRN Success       ${SuccessCount}
-                    Set To Dictionary         ${StatusDictionary}     IRN Exception     ${FailureCount}
-        
-                    #Appending Data To Excel  
-                    Update Excel Cell         ${StatusFilePath}       Position      ${Dictionary}[Branch Name]    ${StatusDictionary}    ${ReportSheetName}   
-                    Remove From Dictionary    ${StatusDictionary}     IRN Loop	    IRN Total	   IRN Success	  IRN Exception
-                    
-                    #Removing Items From Month List
-                    Remove Values From List    ${MonthList}          @{MonthList}
-
-                    # Unselecting the frame
-                    # Unselect Frame
-
-                    #Invoking Setting Filters and Generate Invoices Keyword
-                    ${UploadStatus}     ${TotalInvoice}    ${SuccessCount}     ${FailureCount}    ${DataExcelPath}    Setting Filters And Uploading Invoices    ${Dictionary}  
-                    IF  ${UploadStatus}  
-                        ${Log}           Set Variable    Successfully completed invoice uploading process.
-                        Text File Log    Info            TML Invoice Process Loop    ${Log}
-                        Log              ${Log}
-                    ELSE
-                        ${Log}           Set Variable    Exception occurred during invoice uploading process.
-                        Text File Log    Error           TML Invoice Process Loop    ${Log}
-                        Log              ${Log}
-                    END  
-                    Set To Dictionary         ${StatusDictionary}     Upload Loop          Completed
-                    Set To Dictionary         ${StatusDictionary}     Upload Total         ${TotalInvoice}
-                    Set To Dictionary         ${StatusDictionary}     Upload Success       ${SuccessCount}
-                    Set To Dictionary         ${StatusDictionary}     Upload Exception     ${FailureCount}
-        
-                    #Appending Data To Excel  
-                    Update Excel Cell         ${StatusFilePath}       Position             ${Dictionary}[Branch Name]      ${StatusDictionary}    ${ReportSheetName}   
-                    Remove From Dictionary    ${StatusDictionary}     Upload Loop	       Upload Total	                   Upload Success	      Upload Exception
-                    
-                    #Setting the consolidated excel path
-                    ${ConsolidatedExcelPath}    RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    ConsolidatedExcel.xlsx
-                    Set Global Variable         ${ConsolidatedExcel}        ${ConsolidatedExcelPath}
-                    
-                    #Check whether data file exist
-                    ${DataFiles}        RPA.FileSystem.List Files In Directory    ${DataExcelPath}
-                    ${DataFileCount}    Get Length    ${DataFiles}
-                    IF  ${DataFileCount} > 0
-                        ${FileName}         Get File Name               ${DataFiles}[0]
-                        ${DataExcelPath}    RPA.FileSystem.Join Path    ${DataExcelPath}    ${FileName}
-                    
-                        #Appending data to consolidated data sheet
-                        ${AppendStatus}    Append Consolidated Excel    ${DataExcelPath}    ${ConsolidatedExcelPath}
-
-                        IF  ${AppendStatus}  
-                            ${Log}           Set Variable    Successfully appened data to the consolidated excel file.
-                            Text File Log    Info            TML Invoice Process Loop    ${Log}
-                            Log              ${Log}
-                        ELSE
-                            ${Log}           Set Variable    Exception occurred during appeneding data to the consolidated excel file.
+                            ${Log}           Set Variable    Login failed for Login ID: ${Dictionary}[Login ID]
                             Text File Log    Error           TML Invoice Process Loop    ${Log}
                             Log              ${Log}
+                            
+                            ${RetryCount}        Evaluate        ${RetryCount} + 1 
+                            IF  ${RetryCount} >= ${MaxRetries}
+                                ${Log}                Set Variable             Max retries reached for Login ID: ${Dictionary}[Login ID]. Moving to the next Login ID.
+                                Text File Log         Info                     TML Invoice Process Loop    ${Log}
+                                Log                   ${Log}
+                                Set To Dictionary     ${StatusDictionary}      Login ID               ${Dictionary}[Login ID]   
+                                Set To Dictionary     ${StatusDictionary}      Status                 Not Completed  
+                                Set To Dictionary     ${StatusDictionary}      Position               N/A
+                                Set To Dictionary     ${StatusDictionary}      IRN Total              0
+                                Set To Dictionary     ${StatusDictionary}      IRN Success            0
+                                Set To Dictionary     ${StatusDictionary}      IRN Exception          0
+                                Set To Dictionary     ${StatusDictionary}      Upload Total           0
+                                Set To Dictionary     ${StatusDictionary}      Upload Success         0 
+                                Set To Dictionary     ${StatusDictionary}      Upload Exception       0  
+        
+                                Append Multiple Cells In Excel Row      ${StatusDictionary}       ${StatusFilePath}       ${ReportSheetName} 
+                                Remove From Dictionary                  ${StatusDictionary}       Login ID                Position      IRN Total	   IRN Success	  IRN Exception	    Upload Total	 Upload Success	  Upload Exception    Status    
+                            ELSE IF    ${InvalidCredentialStatus}
+                                ${RetryCount}         Evaluate                 ${MaxRetries} + 0
+                                Set To Dictionary     ${StatusDictionary}      Login ID               ${Dictionary}[Login ID]   
+                                Set To Dictionary     ${StatusDictionary}      Status                 Invalid Credentials 
+                                Set To Dictionary     ${StatusDictionary}      Position               N/A
+                                Set To Dictionary     ${StatusDictionary}      IRN Total              0
+                                Set To Dictionary     ${StatusDictionary}      IRN Success            0
+                                Set To Dictionary     ${StatusDictionary}      IRN Exception          0
+                                Set To Dictionary     ${StatusDictionary}      Upload Total           0
+                                Set To Dictionary     ${StatusDictionary}      Upload Success         0 
+                                Set To Dictionary     ${StatusDictionary}      Upload Exception       0   
+        
+                                Append Multiple Cells In Excel Row      ${StatusDictionary}       ${StatusFilePath}       ${ReportSheetName} 
+                                Remove From Dictionary                  ${StatusDictionary}       Login ID                Position      IRN Total	   IRN Success	  IRN Exception	    Upload Total	 Upload Success	  Upload Exception    Status    
+                                BREAK
+                            ELSE
+                                RPA.Browser.Playwright.Close Browser
+                                Open Website
+                            END
                         END
                     END
 
-                    #Closing IFrame Page
-                    RPA.Browser.Playwright.Close Page
-                END 
-                
-                #Invoking Logout Process
-                IF  ${LoginStatus}
-                    ${RetryCount}          Evaluate    0
-                    WHILE    ${RetryCount} < ${MaxRetries}
-                        TRY
-                            IF  ${IterationCounter} == ${LengthOfList}
-                                # Unselect Frame
-                                ${LogoutStatus}    Logout Portal
-                                IF   ${LogoutStatus}
-                                    ${Log}           Set Variable    Successfully logged out from SAP system.
+                    IF  ${RetryCount} < ${MaxRetries}
+
+                        ${RetryCount}          Evaluate    0
+                        WHILE    ${RetryCount} < ${MaxRetries}
+                            TRY
+                                IF  ${IterationCounter} != 1
+                                    ${HomePageIconExist}    Element Visible Action    ${loc_direct_home_button}
+                                    IF  ${HomePageIconExist}
+                                        Click Element When Clickable Action           ${loc_direct_home_button}
+                                    END
+                                END
+                                
+                                #Invoking Navigation To SAP Screen Keyword
+                                ${NavigationStatus}     Navigation To SAP Warranty    ${Dictionary}
+                                IF  ${NavigationStatus}
+                                    ${Log}           Set Variable    Successfully navigated to SAP Warranty screen.
                                     Text File Log    Info            TML Invoice Process Loop    ${Log}
                                     Log              ${Log}
                                     BREAK
                                 ELSE
-                                    ${Log}           Set Variable    Attempt to log out from the SAP system was a failure.
+                                    ${Log}           Set Variable    Navigation to SAP Warranty screen failed.
                                     Text File Log    Error           TML Invoice Process Loop    ${Log}
                                     Fail             ${Log}
                                 END
-                            END
-                            BREAK  
-                        EXCEPT
-                            ${Log}           Set Variable    Logout failed for Login ID: ${Dictionary}[Login ID]
-                            Text File Log    Error           TML Invoice Process Loop    ${Log}
-                            Log              ${Log}
-                            
-                            ${RetryCount}    Evaluate    ${RetryCount} + 1
-                            IF  ${RetryCount} >= ${MaxRetries}
-                                ${Log}           Set Variable    Max retries reached for Logout ID: ${Dictionary}[Login ID]. Moving to the next Login ID.
-                                Text File Log    Info            TML Invoice Process Loop    ${Log}
-                                Log              ${Log} 
+                            EXCEPT
+                                ${Log}           Set Variable    Navigation to SAP Warranty screen failed for Login ID: ${Dictionary}[Login ID]
+                                Text File Log    Error           Navigation To SAP Warranty    ${Log}
+                                Log              ${Log}
+                                
+                                ${RetryCount}    Evaluate        ${RetryCount} + 1
+                                IF  ${RetryCount} >= ${MaxRetries}
+                                    ${Log}           Set Variable    Max retries reached for Login ID: ${Dictionary}[Login ID]. Moving to the next Login ID.
+                                    Text File Log    Info            TML Invoice Process Loop    ${Log}
+                                    Log              ${Log}
+                                ELSE
+                                    ${HomePageIconExist}       Element Visible Action      ${loc_direct_home_button}
+                                    ${SessionTimeoutExist}     Element Visible Action      ${loc_session_timeout}
+                                    IF  ${SessionTimeoutExist}
+                                        ${RetryLoopStatus}     Retry Scenario Position     ${Dictionary}
+                                        IF  ${RetryLoopStatus}
+                                            ${Log}           Set Variable    Successfully closed the browser and logged in again.
+                                            Text File Log    Info            TML Invoice Process Loop    ${Log}
+                                            Log              ${Log}
+                                            CONTINUE
+                                        END
+                                    ELSE IF    ${HomePageIconExist}
+                                        ${ClickStatus}    Run Keyword And Return Status    Click Element When Clickable Action     ${loc_direct_home_button}
+                                        Run Keyword If    ('${ClickStatus}' == 'False')    Retry Scenario Position    ${Dictionary}
+                                    END
+                                END
                             END
                         END
-                    END 
-                END
-                ${Log}           Set Variable    Completed processing Login ID: ${Dictionary}[Login ID]
-                Text File Log    Info            TML Invoice Process Loop    ${Log} 
-                Log              ${Log}  
+                        
+                        #Setting Dictionary For End Report
+                        Set To Dictionary       ${StatusDictionary}      Login ID       ${Dictionary}[Login ID]    
+                        Set To Dictionary       ${StatusDictionary}      Position       ${Dictionary}[Branch Name]
 
-                # Unselecting the frame
-                # Unselect Frame
+                        #Appending Data To Excel  
+                        Append Multiple Cells In Excel Row      ${StatusDictionary}     ${StatusFilePath}      ${ReportSheetName} 
+                        Remove From Dictionary                  ${StatusDictionary}     Login ID               Position 
+
+                        ${GenerationIRNStatus}    ${TotalInvoice}    ${SuccessCount}     ${FailureCount}    Setting Filters And Generate Invoices   ${Dictionary}
+                        IF  ${GenerationIRNStatus}  
+                            ${Log}           Set Variable    Successfully completed IRN generation process.
+                            Text File Log    Info            TML Invoice Process Loop    ${Log}
+                            Log              ${Log}
+                        ELSE
+                            ${Log}           Set Variable    Exception occurred during IRN generation process.
+                            Text File Log    Error           TML Invoice Process Loop    ${Log}
+                            Log              ${Log}
+                        END  
+                        
+                        Set To Dictionary         ${StatusDictionary}     IRN Total         ${TotalInvoice}
+                        Set To Dictionary         ${StatusDictionary}     IRN Success       ${SuccessCount}
+                        Set To Dictionary         ${StatusDictionary}     IRN Exception     ${FailureCount}
+            
+                        #Appending Data To Excel  
+                        Update Excel Cell         ${StatusFilePath}       Position      ${Dictionary}[Branch Name]    ${StatusDictionary}    ${ReportSheetName}   
+                        Remove From Dictionary    ${StatusDictionary}     IRN Loop	    IRN Total	   IRN Success	  IRN Exception
+                        
+                        #Removing Items From Month List
+                        Remove Values From List    ${MonthList}          @{MonthList}
+
+                        # Unselecting the frame
+                        # Unselect Frame
+
+                        #Invoking Setting Filters and Generate Invoices Keyword
+                        ${UploadStatus}     ${TotalInvoice}    ${SuccessCount}     ${FailureCount}    ${DataExcelPath}    Setting Filters And Uploading Invoices    ${Dictionary}  
+                        IF  ${UploadStatus}  
+                            ${Log}           Set Variable    Successfully completed invoice uploading process.
+                            Text File Log    Info            TML Invoice Process Loop    ${Log}
+                            Log              ${Log}
+                        ELSE
+                            ${Log}           Set Variable    Exception occurred during invoice uploading process.
+                            Text File Log    Error           TML Invoice Process Loop    ${Log}
+                            Log              ${Log}
+                        END  
+                        Set To Dictionary         ${StatusDictionary}     Upload Loop          Completed
+                        Set To Dictionary         ${StatusDictionary}     Upload Total         ${TotalInvoice}
+                        Set To Dictionary         ${StatusDictionary}     Upload Success       ${SuccessCount}
+                        Set To Dictionary         ${StatusDictionary}     Upload Exception     ${FailureCount}
+            
+                        #Appending Data To Excel  
+                        Update Excel Cell         ${StatusFilePath}       Position             ${Dictionary}[Branch Name]      ${StatusDictionary}    ${ReportSheetName}   
+                        Remove From Dictionary    ${StatusDictionary}     Upload Loop	       Upload Total	                   Upload Success	      Upload Exception
+                        
+                        #Setting the consolidated excel path
+                        ${ConsolidatedExcelPath}    RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    ConsolidatedExcel.xlsx
+                        Set Global Variable         ${ConsolidatedExcel}        ${ConsolidatedExcelPath}
+                        
+                        #Check whether data file exist
+                        ${DataFiles}        RPA.FileSystem.List Files In Directory    ${DataExcelPath}
+                        ${DataFileCount}    Get Length    ${DataFiles}
+                        IF  ${DataFileCount} > 0
+                            ${FileName}         Get File Name               ${DataFiles}[0]
+                            ${DataExcelPath}    RPA.FileSystem.Join Path    ${DataExcelPath}    ${FileName}
+                        
+                            #Appending data to consolidated data sheet
+                            ${AppendStatus}    Append Consolidated Excel    ${DataExcelPath}    ${ConsolidatedExcelPath}
+
+                            IF  ${AppendStatus}  
+                                ${Log}           Set Variable    Successfully appened data to the consolidated excel file.
+                                Text File Log    Info            TML Invoice Process Loop    ${Log}
+                                Log              ${Log}
+                            ELSE
+                                ${Log}           Set Variable    Exception occurred during appeneding data to the consolidated excel file.
+                                Text File Log    Error           TML Invoice Process Loop    ${Log}
+                                Log              ${Log}
+                            END
+                        END
+
+                        #Closing IFrame Page
+                        RPA.Browser.Playwright.Close Page
+                    END 
+                    
+                    #Invoking Logout Process
+                    IF  ${LoginStatus}
+                        ${RetryCount}          Evaluate    0
+                        WHILE    ${RetryCount} < ${MaxRetries}
+                            TRY
+                                IF  ${IterationCounter} == ${LengthOfList}
+                                    # Unselect Frame
+                                    ${LogoutStatus}    Logout Portal
+                                    IF   ${LogoutStatus}
+                                        ${Log}           Set Variable    Successfully logged out from SAP system.
+                                        Text File Log    Info            TML Invoice Process Loop    ${Log}
+                                        Log              ${Log}
+                                        BREAK
+                                    ELSE
+                                        ${Log}           Set Variable    Attempt to log out from the SAP system was a failure.
+                                        Text File Log    Error           TML Invoice Process Loop    ${Log}
+                                        Fail             ${Log}
+                                    END
+                                END
+                                BREAK  
+                            EXCEPT
+                                ${Log}           Set Variable    Logout failed for Login ID: ${Dictionary}[Login ID]
+                                Text File Log    Error           TML Invoice Process Loop    ${Log}
+                                Log              ${Log}
+                                
+                                ${RetryCount}    Evaluate    ${RetryCount} + 1
+                                IF  ${RetryCount} >= ${MaxRetries}
+                                    ${Log}           Set Variable    Max retries reached for Logout ID: ${Dictionary}[Login ID]. Moving to the next Login ID.
+                                    Text File Log    Info            TML Invoice Process Loop    ${Log}
+                                    Log              ${Log} 
+                                END
+                            END
+                        END 
+                    END
+                    ${Log}           Set Variable    Completed processing Login ID: ${Dictionary}[Login ID]
+                    Text File Log    Info            TML Invoice Process Loop    ${Log} 
+                    Log              ${Log}  
+
+                    # Unselecting the frame
+                    # Unselect Frame
+                EXCEPT  AS    ${Exception}
+                    Log       ${Exception} 
+                    Text File Log    Error   TML Invoice Process Loop    ${Exception} 
+                    Continue For Loop
+                END 
             END
         END
 
