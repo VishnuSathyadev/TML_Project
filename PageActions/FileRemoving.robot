@@ -22,6 +22,7 @@ Directories To CleanUp Files
         ${ScreenShot}        RPA.FileSystem.Join Path    ${EXECDIR}                     Output\\browser\\screenshot
         ${DownloadPath}      RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    Downloads
         ${UploadPath}        RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    Uploads
+        ${MovePath}          RPA.FileSystem.Join Path    ${EXECDIR}                     Output\\Logs
 
         ${DeleteStatus}      Remove Older Files With Condition    ${EXECDIR}
         IF  ${DeleteStatus}
@@ -34,7 +35,19 @@ Directories To CleanUp Files
             Fail             ${Log} 
         END
 
-        ${FirstList}         Create List     ${OutputPath}    ${InputPath}    ${SikuliPath}    ${ScreenShot}
+        ${FirstList}         Create List     ${MovePath}    ${InputPath}    ${SikuliPath}    ${ScreenShot}
+        
+        #Move all files in output to Log folder
+        ${MoveStatus}        Move All Files    ${OutputPath}    ${MovePath}
+        IF  ${DeleteStatus}
+            ${Log}           Set Variable    Successfully moved all file.
+            Text File Log    Info            Directories To CleanUp Files    ${Log}
+            Log              ${Log}   
+        ELSE
+            ${Log}           Set Variable    Exception occurred while moving files.
+            Text File Log    Error           Directories To CleanUp Files    ${Log}
+            Fail             ${Log} 
+        END
 
         FOR    ${Directory}    IN    @{FirstList}
             ${DeleteStatus}    Remove Older Files    ${Directory}

@@ -56,6 +56,5 @@ TestTask
         ${FileName}          Get File Name            ${File}
     END
 
-    # Digital Sign Using Sikuli    ${StatusFilePath}    1245    AMC    ABCD@1234     ${$GoogleDrivePath}
-    # # New Browser            chromium       headless=${False}
+
  

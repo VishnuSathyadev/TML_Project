@@ -121,3 +121,23 @@ def run_batch_file(batch_path):
     except Exception as e:
         print(f"Error: {e}")
         return False
+    
+def move_all_files(source_dir, target_dir):
+    try:
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
+
+        for filename in os.listdir(source_dir):
+            source_path = os.path.join(source_dir, filename)
+            target_path = os.path.join(target_dir, filename)
+
+            if os.path.isfile(source_path):
+                shutil.move(source_path, target_path)
+                print(f"Moved: {filename}")
+        
+        print("All files moved successfully.")
+        return True
+
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return False
