@@ -44,30 +44,11 @@ ${LOG_DIR}              D:\\TML_Process_GIT\\TML_Project\\Output
 
 *** Tasks ***
 TestTask
-    # Open File    ${StatusFilePath}
-    # RPA.Windows.Control Window    name:"AV2DocumentTabView"
-    # ${FolderIdPdf}    Create Nested Folders    ${FolderList} 
+    ${FileExistInDrive}      ${FileName}    Check File Exists    1lhq_zUW-vbdE65NSbxkQdkWFdmznVNk5    StatusExcel.xlsx
     Read Config File
-    Directories To CleanUp Files
-    ${timestamp}=    Get Modified Time    ${path}
-    ${date}=    Convert Date    ${timestamp}    result_format=${NormalDateFormat}
+    Read Client Config File
+    ${Status}    Uploading Files To Google Drive
 
-    # Read Config File
-    # ${Status}    Uploading Files To Google Drive
-
-
-    ${files}=    List Files In Directory    ${LOG_DIR}
-    FOR    ${file}    IN    @{files}
-        ${path}    Convert To String   ${file}    
-        ${mod_time}=    Get Modified Time    ${path}
-        ${now}=    Get Current Date    result_format=epoch
-        ${file_time}=    Convert Date    ${mod_time}    result_format=epoch
-        ${age_in_days}=    Evaluate    (${now} - ${file_time}) / 86400
-        Run Keyword If    ${age_in_days} > 7    Remove File    ${file}
-        Log    Checked ${file}: ${age_in_days} days old
-    END
-
-    ${FolderList}    RPA.FileSystem.List Directories In Directory     D:\\TML_Claims\\Uploads\\GST_Invoices
 
     # ${MailStatus}    SendEmail.SendEmail   ${Subject}   ${EmailBody}   ${RecipientTo}   ${RecipientCc}   ${Attachment}    ${ReportSheetName}    cor.rpa.srvclaims@pmmil.com    udzn ybdc jaif akvx 
     # ${FileExistInDrive}      ${FileName}    Check File Exists    1lhq_zUW-vbdE65NSbxkQdkWFdmznVNk5    StatusExcel.xlsx
@@ -75,12 +56,6 @@ TestTask
         ${FileName}          Get File Name            ${File}
     END
 
-    Digital Sign Using Sikuli    ${StatusFilePath}    1245    AMC    ABCD@1234     ${$GoogleDrivePath}
+    # Digital Sign Using Sikuli    ${StatusFilePath}    1245    AMC    ABCD@1234     ${$GoogleDrivePath}
     # # New Browser            chromium       headless=${False}
-    # # New Page             https://demo.automationtesting.in/Frames.html
-    # Sleep                ${SHORT_WAIT}    
-    # ${ZeroValue}    Evaluate    0
-    # ${ActionRowCount}    Evaluate    25
-    # IF    ${ActionRowCount} < ${PageLimit}
-    #     Log    message     
-    # END
+ 

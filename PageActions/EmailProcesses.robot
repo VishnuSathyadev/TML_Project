@@ -23,11 +23,11 @@ End Job Report Email
 
         #Setting Current date and To address to variables
         ${CurrentDate}    Get Current Date    result_format=${NormalDateFormat}
-        ${RecipientTo}    Set Variable        ${CONFIG}[RecipientTo]
+        ${RecipientTo}    Set Variable        ${CLIENT_CONFIG}[RecipientTo]
         
         #Setting CC recipients based on condition
         TRY
-            ${RecipientCc}    Set Variable If    '${CONFIG}[RecipientCc]' != 'None'    ${CONFIG}[RecipientCc]    None
+            ${RecipientCc}    Set Variable If    '${CLIENT_CONFIG}[RecipientCc]' != 'None'    ${CLIENT_CONFIG}[RecipientCc]    None
         EXCEPT   AS    ${Exception}
             ${RecipientCc}    Create List        
         END
