@@ -135,6 +135,18 @@ Popular TML Process
         ${Log}               Set Variable    Completed processing Popular TML Process.
         Text File Log        Info            Popular TML Process    ${Log}
         Log                  ${Log}
+
+        #Triggering TML Email Process
+        ${TriggerStatus}    Run Batch File    batch_path
+        IF  ${TriggerStatus}
+            ${Log}           Set Variable    Successfully triggered the TML Email Process.
+            Text File Log    Info            Popular TML Process    ${Log}
+            Log              ${Log}
+        ELSE
+            ${Log}           Set Variable    Exception occurred while triggering the Email Process.
+            Text File Log    Error           Popular TML Process    ${Log}
+            Log              ${Log}
+        END
         
     EXCEPT         AS        ${Exception}
         Log                  ${Exception}

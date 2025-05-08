@@ -112,3 +112,12 @@ def delete_directory(path):
     except Exception as e:
         print(f"Error deleting directory: {e}")
         return False
+    
+def run_batch_file(batch_path):
+    try:
+        os.system(batch_path)
+        print(f"Executed: {batch_path}")
+        return True
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
