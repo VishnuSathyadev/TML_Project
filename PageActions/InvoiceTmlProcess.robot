@@ -948,7 +948,7 @@ Setting Filters And Uploading Invoices
                                 ${TotalInvoice}            Evaluate                             ${TotalInvoice} + ${InvoiceCount}
                                 
                                 #Invoking Data Extraction and Appending to Excel Process
-                                ${ExtractionStatus}    ${TmlRefList}    ${ConsolidatedDictionary}    Data Extraction From Screen    ${ExcelPath}    ${SheetName}    ${Dictionary}[Branch Name]    ${InvoiceCount}
+                                ${ExtractionStatus}    ${TmlRefList}      Data Extraction From Screen    ${ExcelPath}    ${SheetName}    ${Dictionary}[Branch Name]    ${InvoiceCount}
                                 IF  ${ExtractionStatus}
                                     ${Log}             Set Variable     Data Extraction process completed successfully.
                                     Text File Log      Info             Setting Filters And Uploading Invoices    ${Log}
@@ -1464,11 +1464,11 @@ Data Extraction From Screen
         ${Log}           Set Variable     Completed data extraction process.
         Text File Log    Info             Data Extraction From Screen     ${Log}
         Log              ${Log}
-        RETURN           True             ${TmlNoList}    ${AppendDictionary}
+        RETURN           True             ${TmlNoList}
     EXCEPT    AS    ${Exception}
         Text File Log    Error            Data Extraction From Screen     ${Exception}
         Log              ${Exception}
-        RETURN           False            None            None
+        RETURN           False            None
     END
 
 Download GST Invoice
