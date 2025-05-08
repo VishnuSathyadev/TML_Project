@@ -2,20 +2,20 @@
 Documentation  This robot file initializes configuration dictionary which can be used throughout the project.
 Library        RPA.Excel.Files
 Library        RPA.Browser.Selenium
+Library        RPA.Browser.Playwright
 Library        RPA.Desktop
 Library        String
 Library        RPA.Windows
 Library        OperatingSystem
 Library        Collections
-Library        ../Libraries/ExcelOperations.py
 Resource       TextLog.robot
+Library        ../Libraries/ExcelOperations.py
+Library        ../Libraries/GoogleDrive.py
 Variables      ../Variables/GlobalVariables.py
-Library          RPA.Browser.Playwright
 
 
 *** Variables ***
 ${InputExcelPath}
-
 
 *** Keywords ***
 
@@ -26,8 +26,23 @@ Read Client Config File
         Text File Log        Info            Read Client Config File                 ${Log}
         Log                  ${Log}
         
-        ${DataTable}         ExcelOperations.Read Excel File                         ${CONFIG}[ClientConfigPath]      ${CONFIG}[ClientConfigSheetName]
-        ${List_Of_Ids}       ExcelOperations.Unique Column Values As List            ${DataTable}                     Login ID
+        #Setting Client Config File Name
+        ${ClientConfigFileName}    Get File Name     ${CONFIG}[ClientConfigPath]
+
+        #Download Client Config From Google Drive
+        ${DownloadStatus}     Download File    ${ConfigFolderId}     ${ClientConfigFileName}       ${CONFIG}[ClientConfigPath]
+        IF  ${DownloadStatus}
+            ${Log}            Set Variable    Successfully downloaded the client config from Google Drive.
+            Text File Log     Info            Read Client Config File    ${Log}
+            Log               ${Log}
+        ELSE
+            ${Log}            Set Variable    Exception occurred while downloading client config from the Google Drive.
+            Text File Log     Info            Read Client Config File    ${Log}
+            Fail              ${Log}
+        END
+
+        ${DataTable}         ExcelOperations.Read Excel File                     ${CONFIG}[ClientConfigPath]      ${CONFIG}[ClientConfigSheetName]
+        ${List_Of_Ids}       ExcelOperations.Unique Column Values As List        ${DataTable}                     Login ID
 
         #Reading Sheet2 for Dictionary Values
         &{OutClientConfig}     Create Dictionary
