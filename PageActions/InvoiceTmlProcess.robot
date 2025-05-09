@@ -1218,17 +1218,6 @@ Setting Filters And Uploading Invoices
                                                 END
                                             END
 
-                                            # ${UploadToDriveStatus}               Uploading Files To Google Drive       ${GoogleDrivePath}    ${DownloadPath}    ${ExcelPath}
-                                            # IF  ${UploadToDriveStatus}
-                                            #     ${Log}           Set Variable    Successfully uploaded the files to Google Drive.
-                                            #     Text File Log    Info            Setting Filters And Uploading Invoices    ${Log}
-                                            #     Log              ${Log}
-                                            # ELSE
-                                            #     ${Log}           Set Variable    Exception occurred while uploading the files to Google Drive.
-                                            #     Text File Log    Error           Setting Filters And Uploading Invoices    ${Log}
-                                            #     Log              ${Log}
-                                            # END
-
                                             ${SuccessCount}                 Evaluate                        ${SuccessCount} + 1
                                             ${CurrentSuccessCount}          Evaluate                        ${CurrentSuccessCount} + 1
                                             ${CloseButtonCheck}             Element Visible Action          ${loc_gstirn_close_button}

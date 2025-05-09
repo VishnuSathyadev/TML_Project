@@ -255,19 +255,19 @@ Click Element When Clickable Action
  
 Get Text Action
     [Arguments]    ${locater}
-    ${Text}=    Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    RPA.Browser.Playwright.Get Text    ${locater}
-    RETURN   ${Text} 
+    ${Text}        Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    RPA.Browser.Playwright.Get Text    ${locater}
+    RETURN         ${Text} 
 
 Get Value Action
     [Arguments]    ${locater}
-    ${Text}=    Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    RPA.Browser.Playwright.Get Property    ${locater}    Value
-    RETURN   ${Text}  
+    ${Text}        Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    RPA.Browser.Playwright.Get Property    ${locater}    Value
+    RETURN         ${Text}  
  
 Element Visible Action
     [Arguments]    ${locater}
-    Sleep       ${SHORT_WAIT}    
-    ${Flag}=    Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    Run Keyword And Return Status    RPA.Browser.Playwright.Wait For Elements State     ${locater}    visible   timeout=0.5s
-    RETURN   ${Flag}
+    Sleep          ${SHORT_WAIT}    
+    ${Flag}        Run Keyword And Return Status    RPA.Browser.Playwright.Wait For Elements State     ${locater}    visible   timeout=1s
+    RETURN         ${Flag}
  
 Clear Element Text Action
     [Arguments]    ${locater}
@@ -275,23 +275,23 @@ Clear Element Text Action
 
 Wait Until Element Available
     [Arguments]    ${locater}
-    ${Flag}    Run Keyword And Return Status    RPA.Browser.Playwright.Wait For Elements State     ${locater}    visible   timeout=30s
-    RETURN   ${Flag} 
+    ${Flag}        Run Keyword And Return Status    RPA.Browser.Playwright.Wait For Elements State     ${locater}    visible   timeout=30s
+    RETURN         ${Flag} 
 
 Wait For Element To Disappear 
     [Arguments]    ${locater}
-    ${Flag}=    Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    Run Keyword And Return Status    RPA.Browser.Playwright.Wait For Elements State     ${locater}    visible    timeout=60s
-    RETURN   ${Flag} 
+    ${Flag}        Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    Run Keyword And Return Status    RPA.Browser.Playwright.Wait For Elements State     ${locater}    visible    timeout=60s
+    RETURN         ${Flag} 
 
 Get Message From Attribute
     [Arguments]    ${locater}    ${attribute}
-    ${Message}    Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    Get Element Attribute    ${locater}    ${attribute}
-    RETURN    ${Message}
+    ${Message}     Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    Get Element Attribute    ${locater}    ${attribute}
+    RETURN         ${Message}
 
 File Exist
     [Arguments]    ${path}
-    ${Flag}=    Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    Run Keyword And Return Status    File Should Exist    ${path}
-    RETURN   ${Flag}
+    ${Flag}        Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    Run Keyword And Return Status    File Should Exist    ${path}
+    RETURN         ${Flag}
 
 Press Key Action
     [Arguments]    ${locater}    ${keyword}
@@ -299,10 +299,10 @@ Press Key Action
 
 Wait For Element To Disappear With Timeout 
     [Arguments]    ${locater}    ${timeout}
-    ${Flag}=    Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    Run Keyword And Return Status    RPA.Browser.Playwright.Wait For Elements State    ${locater}    visible     timeout=${timeout}
-    RETURN   ${Flag}
+    ${Flag}        Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}    Run Keyword And Return Status    RPA.Browser.Playwright.Wait For Elements State    ${locater}    visible     timeout=${timeout}
+    RETURN         ${Flag}
 
 Wait Until Element Available With Timeout
     [Arguments]    ${locater}    ${timeout}
-    ${Flag}=    Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}     Run Keyword And Return Status    RPA.Browser.Playwright.Wait For Elements State    ${locater}  visible     timeout=${timeout}
-    RETURN   ${Flag}
+    ${Flag}        Wait Until Keyword Succeeds    ${GLOBAL_RETRY_AMOUNT}    ${SHORT_GLOBAL_RETRY_INTERVAL}     Run Keyword And Return Status    RPA.Browser.Playwright.Wait For Elements State    ${locater}  visible     timeout=${timeout}
+    RETURN         ${Flag}
