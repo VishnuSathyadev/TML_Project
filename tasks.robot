@@ -69,17 +69,9 @@ Popular TML Process
             Fail             ${Log}
         END
 
-        #Invoking End Job Report Email Keyword
-        # ${MailStatus}        End Job Report Email    ${StatusFilePath}
-        # IF  ${MailStatus}
-        #     ${Log}           Set Variable    Successfully completed TML End Job Report Mail.
-        #     Text File Log    Info            Popular TML Process    ${Log}
-        #     Log              ${Log}
-        # ELSE
-        #     ${Log}           Set Variable    Exception occurred while processing TML End Job Report Mail.
-        #     Text File Log    Error           Popular TML Process    ${Log}
-        #     Fail             ${Log}
-        # END
+        #Formating Excel Headers
+        ${FormatStatus}    Format Excel Headers    ${StatusFilePath}
+        ${FormatStatus}    Format Excel Headers    ${ConsolidatedExcel}
 
         #Uploading all PDFs and Excel Data To Google Drive
         ${UploadClaimsToDriveStatus}         Uploading Files To Google Drive       
@@ -114,7 +106,7 @@ Popular TML Process
         ELSE
             ${Log}           Set Variable    Exception occurred while processing TML End Job Report Mail.
             Text File Log    Error           Popular TML Process    ${Log}
-            Fail             ${Log}
+            Log              ${Log}
         END
         
         #Cleaning up unwanted files from local machine

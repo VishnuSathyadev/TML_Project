@@ -1,4 +1,5 @@
 from openpyxl import load_workbook, Workbook
+from openpyxl.styles import Font, Alignment
 from openpyxl.styles import numbers
 from datetime import datetime
 import pandas as pd
@@ -386,4 +387,35 @@ def append_consolidated_excel(source_file, target_file, sheet_name="Consolidated
 
     except Exception as e:
         print(f"Error while copying/appending Excel data: {e}")
+        return False
+    
+def format_excel_headers(file_path):
+    try:
+        wb = load_workbook(file_path)
+
+        for sheet in wb.worksheets:
+            column_widths = {}
+
+            for row in sheet.iter_rows():
+                for cell in row:
+                    # Track max width of content for each column
+                    if cell.value:
+                        col_letter = cell.column_letter
+                        cell_length = len(str(cell.value))
+                        column_widths[col_letter] = max(column_widths.get(col_letter, 0), cell_length)
+
+            for cell in sheet[1]:  # First row (headers)
+                cell.font = Font(bold=True)
+                cell.alignment = Alignment(horizontal="center", vertical="center")
+
+            # Set column widths
+            for col_letter, width in column_widths.items():
+                sheet.column_dimensions[col_letter].width = width + 2  # add padding
+
+        wb.save(file_path)
+        print(f"Headers formatted and columns auto-fitted in: {file_path}")
+        return True
+
+    except Exception as e:
+        print(f"Error: {e}")
         return False
