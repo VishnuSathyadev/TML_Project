@@ -132,12 +132,33 @@ def move_all_files(source_dir, target_dir):
             target_path = os.path.join(target_dir, filename)
 
             if os.path.isfile(source_path):
-                shutil.move(source_path, target_path)
-                print(f"Moved: {filename}")
-        
+                try:
+                    shutil.move(source_path, target_path)
+                    print(f"Moved: {filename}")
+                except Exception as file_error:
+                    print(f"Skipped {filename} due to error: {file_error}")
         print("All files moved successfully.")
         return True
 
     except Exception as e:
         print(f"Error occurred: {e}")
+        return False
+    
+def delete_all_files(directory):
+    try:
+        for filename in os.listdir(directory):
+            file_path = os.path.join(directory, filename)
+
+            if os.path.isfile(file_path):
+                try:
+                    os.remove(file_path)
+                    print(f"Deleted: {filename}")
+                except Exception as file_error:
+                    print(f"Could not delete {filename}: {file_error}")
+
+        print("File deletion process completed.")
+        return True
+
+    except Exception as e:
+        print(f"Error accessing directory: {e}")
         return False

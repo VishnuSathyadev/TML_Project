@@ -18,8 +18,8 @@ Directories To CleanUp Files
         
         ${OutputPath}        RPA.FileSystem.Join Path    ${EXECDIR}                     Output
         ${InputPath}         RPA.FileSystem.Join Path    ${EXECDIR}                     Input
-        ${SikuliPath}        RPA.FileSystem.Join Path    ${EXECDIR}                     Output\\sikuli_captured
-        ${ScreenShot}        RPA.FileSystem.Join Path    ${EXECDIR}                     Output\\browser\\screenshot
+        ${SikuliPath}        RPA.FileSystem.Join Path    ${EXECDIR}                     sikuli_captured
+        ${ScreenShot}        RPA.FileSystem.Join Path    ${EXECDIR}                     browser\\screenshot
         ${DownloadPath}      RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    Downloads
         ${UploadPath}        RPA.FileSystem.Join Path    ${CONFIG}[ClaimsFolderPath]    Uploads
         ${MovePath}          RPA.FileSystem.Join Path    ${EXECDIR}                     Output\\Logs
@@ -35,18 +35,18 @@ Directories To CleanUp Files
             Fail             ${Log} 
         END
 
-        ${FirstList}         Create List     ${MovePath}    ${InputPath}    ${SikuliPath}    ${ScreenShot}
+        ${FirstList}         Create List     ${MovePath}    ${InputPath}    
         
         #Move all files in output to Log folder
         ${MoveStatus}        Move All Files    ${OutputPath}    ${MovePath}
-        IF  ${DeleteStatus}
+        IF  ${MoveStatus}
             ${Log}           Set Variable    Successfully moved all file.
             Text File Log    Info            Directories To CleanUp Files    ${Log}
             Log              ${Log}   
         ELSE
             ${Log}           Set Variable    Exception occurred while moving files.
             Text File Log    Error           Directories To CleanUp Files    ${Log}
-            Fail             ${Log} 
+            Log              ${Log} 
         END
 
         FOR    ${Directory}    IN    @{FirstList}
@@ -58,7 +58,7 @@ Directories To CleanUp Files
             ELSE
                 ${Log}           Set Variable    Exception occurred while removing files.
                 Text File Log    Error           Directories To CleanUp Files    ${Log}
-                Fail             ${Log} 
+                Log              ${Log} 
             END
         END
         
@@ -73,10 +73,13 @@ Directories To CleanUp Files
             ELSE
                 ${Log}           Set Variable    Exception occurred while removing files.
                 Text File Log    Error           Directories To CleanUp Files    ${Log}
-                Fail             ${Log} 
+                Log             ${Log} 
             END
         END
         
+        ${Status}    Delete All Files    ${SikuliPath}
+        ${Status}    Delete All Files    ${ScreenShot}
+
         ${Log}               Set Variable    Completed setting directories.
         Text File Log        Info            Directories To CleanUp Files    ${Log}
         Log                  ${Log}
@@ -134,8 +137,12 @@ Remove Older Files With Condition
                 ${ModTime}          Get Modified Time    ${Path}
                 ${CurrentDate}      Get Current Date     result_format=epoch
                 ${FileTime}         Convert Date         ${ModTime}                result_format=epoch
-                ${AgeInDays}        Evaluate             (${CurrentDate} - ${FileTime}) / 86400   
-                Run Keyword If      ${AgeInDays} > 1     OperatingSystem.Remove File    ${File}
+                ${AgeInDays}        Evaluate             (${CurrentDate} - ${FileTime}) / 86400  
+                TRY 
+                    Run Keyword If      ${AgeInDays} > 0.5     OperatingSystem.Remove File    ${File}
+                EXCEPT    AS   ${Exception}
+                    Log        ${Exception}
+                END
             END
         END
 
